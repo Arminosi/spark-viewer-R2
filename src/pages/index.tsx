@@ -11,7 +11,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRouter } from 'next/router';
-import { ReactNode, useContext, useCallback } from 'react';
+import { ReactNode, useContext, useCallback, useEffect } from 'react';
 import { HomepageHeader } from '../components/Header';
 import SparkLayout from '../components/SparkLayout';
 import { NextPageWithLayout, SelectedFileContext } from './_app';
@@ -24,11 +24,25 @@ import styles from '../style/homepage.module.scss';
 const Index: NextPageWithLayout = () => {
     const { setSelectedFile } = useContext(SelectedFileContext);
     const router = useRouter();
+    const { reports, status } = useRemoteReports();
 
     function onFileSelected(file: File) {
         setSelectedFile(file);
         router.push('/_');
     }
+
+    // 自动加载最新的远程报告
+    useEffect(() => {
+        if (status === 'success' && reports.length > 0) {
+            // 按上传时间排序，获取最新的报告
+            const latestReport = reports.sort((a, b) => 
+                new Date(b.uploaded).getTime() - new Date(a.uploaded).getTime()
+            )[0];
+            
+            // 自动跳转到最新报告
+            router.push(`/remote?path=${encodeURIComponent(latestReport.downloadPath)}`);
+        }
+    }, [reports, status, router]);
 
     return (
         <article className={styles.homepage}>

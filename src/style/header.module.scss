@@ -81,23 +81,20 @@
 }
 
 .remote-button {
-    background: linear-gradient(135deg, #1a1f2e 0%, #16213e 100%);
-    color: #00d4ff;
-    border: 1px solid rgba(0, 212, 255, 0.3);
-    border-radius: 8px;
-    padding: 8px 16px;
+    background: #2d3748;
+    color: #e2e8f0;
+    border: 1px solid #4a5568;
+    border-radius: 6px;
+    padding: 8px 12px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     font-size: 14px;
-    font-weight: 500;
-    box-shadow: 0 2px 8px rgba(0, 212, 255, 0.1);
     
     .button-icon {
-        font-size: 16px;
-        filter: hue-rotate(180deg) brightness(1.2);
+        font-size: 14px;
     }
     
     .button-text {
@@ -105,23 +102,14 @@
     }
     
     &:hover {
-        background: linear-gradient(135deg, #1e2433 0%, #1a2845 100%);
-        border-color: rgba(0, 212, 255, 0.6);
-        box-shadow: 
-            0 4px 16px rgba(0, 212, 255, 0.2),
-            inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        transform: translateY(-1px);
-    }
-    
-    &:active {
-        transform: translateY(0);
-        box-shadow: 0 2px 6px rgba(0, 212, 255, 0.15);
+        background: #4a5568;
+        border-color: #718096;
     }
     
     @media (max-width: 640px) {
         .button-text {
             display: none;
         }
-        padding: 8px 12px;
+        padding: 8px;
     }
 }
