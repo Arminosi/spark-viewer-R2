@@ -11,10 +11,11 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRouter } from 'next/router';
-import { ReactNode, useContext } from 'react';
+import { ReactNode, useContext, useCallback, useEffect } from 'react';
 import { HomepageHeader } from '../components/Header';
 import SparkLayout from '../components/SparkLayout';
 import { NextPageWithLayout, SelectedFileContext } from './_app';
+import useRemoteReports from '../hooks/useRemoteReports';
 
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { env } from '../env';
@@ -23,11 +24,25 @@ import styles from '../style/homepage.module.scss';
 const Index: NextPageWithLayout = () => {
     const { setSelectedFile } = useContext(SelectedFileContext);
     const router = useRouter();
+    const { reports, status } = useRemoteReports();
 
     function onFileSelected(file: File) {
         setSelectedFile(file);
         router.push('/_');
     }
+
+    // 自动加载最新的远程报告
+    useEffect(() => {
+        if (status === 'success' && reports.length > 0) {
+            // 按上传时间排序，获取最新的报告
+            const latestReport = reports.sort((a, b) => 
+                new Date(b.uploaded).getTime() - new Date(a.uploaded).getTime()
+            )[0];
+            
+            // 自动跳转到最新报告
+            router.push(`/remote?path=${encodeURIComponent(latestReport.downloadPath)}`);
+        }
+    }, [reports, status, router]);
 
     return (
         <article className={styles.homepage}>
@@ -90,6 +105,8 @@ const AboutSection = () => {
                 spark monitors and reports a number of key metrics which are
                 useful for tracking performance over time.
             </AboutFeature>
+
+            <RemoteReportsSelector />
 
             <p>
                 More information about spark can be found on{' '}
@@ -162,6 +179,48 @@ const ViewerSection = ({
                 much appreciated!
             </p>
         </section>
+    );
+};
+
+const RemoteReportsSelector = () => {
+    const router = useRouter();
+    const { reports, isLoading, isError } = useRemoteReports();
+
+    const handleRemoteReportSelect = useCallback(
+        (event: React.ChangeEvent<HTMLSelectElement>) => {
+            const selectedValue = event.target.value;
+            if (selectedValue) {
+                router.push(`/remote?path=${encodeURIComponent(selectedValue)}`);
+            }
+        },
+        [router]
+    );
+
+    return (
+        <div className={styles['remote-reports-section']}>
+            <h3>历史报告查看</h3>
+            <p>快速查看之前生成的性能分析报告。</p>
+            <div className={styles['remote-selector-container']}>
+                <select 
+                    className={styles['remote-select']}
+                    onChange={handleRemoteReportSelect}
+                    disabled={isLoading}
+                    defaultValue=""
+                >
+                    <option value="">
+                        {isLoading ? '正在加载历史报告...' : isError ? '无法加载历史报告' : '选择一个历史报告'}
+                    </option>
+                    {reports.map(report => (
+                        <option key={report.key} value={report.downloadPath}>
+                            {new Date(report.uploaded).toLocaleString('zh-CN')} - {report.sizeMB}
+                        </option>
+                    ))}
+                </select>
+                {!isLoading && !isError && reports.length > 0 && (
+                    <p className={styles['remote-hint']}>选择报告后将自动加载和分析数据</p>
+                )}
+            </div>
+        </div>
     );
 };
 

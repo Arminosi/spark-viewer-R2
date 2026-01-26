@@ -73,3 +73,43 @@
         }
     }
 }
+
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.remote-button {
+    background: #2d3748;
+    color: #e2e8f0;
+    border: 1px solid #4a5568;
+    border-radius: 6px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 14px;
+    
+    .button-icon {
+        font-size: 14px;
+    }
+    
+    .button-text {
+        white-space: nowrap;
+    }
+    
+    &:hover {
+        background: #4a5568;
+        border-color: #718096;
+    }
+    
+    @media (max-width: 640px) {
+        .button-text {
+            display: none;
+        }
+        padding: 8px;
+    }
+}
