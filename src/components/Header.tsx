@@ -10,7 +10,7 @@ export interface HeaderProps {
     title?: string;
 }
 
-export default function Header({ title = 'spark' }: HeaderProps) {
+export default function Header({ title = 'Artstyle | Spark Profiler' }: HeaderProps) {
     const router = useRouter();
     const [isModalOpen, setIsModalOpen] = useState(false);
     
