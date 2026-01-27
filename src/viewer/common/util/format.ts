@@ -37,6 +37,45 @@ export function formatBytesShort(bytes: number) {
     );
 }
 
+// Localized formatting helpers - accept a translation function `t` from useLanguage()
+export function formatBytesLocalized(bytes: number, t: (k: string) => string) {
+    const formatted = formatBytes(bytes);
+    // formatted is like '1.2 MB' or '0 bytes' or '123 B'
+    const parts = formatted.split(' ');
+    if (parts.length === 2) {
+        const [num, unit] = parts;
+        const key = `viewer.units.${unit}`;
+        const localizedUnit = t(key) || unit;
+        return `${num} ${localizedUnit}`;
+    }
+    // fallback
+    return formatted;
+}
+
+export function formatDurationLocalized(duration: number, t: (k: string) => string) {
+    const s = formatDuration(duration); // e.g. '1h 2m 3s'
+    if (!s) return s;
+    const parts = s.split(' ');
+    const localized = parts
+        .map(part => {
+            if (part.endsWith('h')) {
+                const num = part.slice(0, -1);
+                return `${num}${t('viewer.time.h')}`;
+            }
+            if (part.endsWith('m')) {
+                const num = part.slice(0, -1);
+                return `${num}${t('viewer.time.m')}`;
+            }
+            if (part.endsWith('s')) {
+                const num = part.slice(0, -1);
+                return `${num}${t('viewer.time.s')}`;
+            }
+            return part;
+        })
+        .join(' ');
+    return localized;
+}
+
 export function formatDuration(duration: number) {
     const seconds = Math.abs(Math.ceil(duration / 1000));
     const h = (seconds - (seconds % 3600)) / 3600;

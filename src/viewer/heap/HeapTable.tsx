@@ -1,5 +1,6 @@
 import { AutoSizer, Column, Table } from 'react-virtualized';
-import { formatBytes } from '../common/util/format';
+import { formatBytesLocalized } from '../common/util/format';
+import { useLanguage } from '../../i18n';
 import HeapData from './HeapData';
 
 export interface HeapTableProps {
@@ -8,6 +9,7 @@ export interface HeapTableProps {
 }
 
 export default function HeapTable({ data, searchQuery }: HeapTableProps) {
+    const { t } = useLanguage();
     let { entries } = data;
 
     if (searchQuery) {
@@ -49,7 +51,8 @@ export default function HeapTable({ data, searchQuery }: HeapTableProps) {
                         dataKey="size"
                         width={100}
                         cellRenderer={({ cellData }) => {
-                            return formatBytes(cellData);
+                                const { t } = useLanguage();
+                                return formatBytesLocalized(cellData, t);
                         }}
                     />
                     <Column

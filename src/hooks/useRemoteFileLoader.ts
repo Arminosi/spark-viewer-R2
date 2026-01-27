@@ -3,7 +3,7 @@ import { fetchFromRemote } from '../viewer/common/logic/fetch';
 import { parse } from '../viewer/common/logic/parse';
 
 export interface UseRemoteFileLoaderResult {
-    loadRemoteFile: (downloadPath: string) => Promise<void>;
+    loadRemoteFile: (downloadPath: string, onProgress?: (loaded: number, total?: number) => void) => Promise<void>;
 }
 
 export default function useRemoteFileLoader(
@@ -11,10 +11,10 @@ export default function useRemoteFileLoader(
     onError: (error: Error) => void
 ): UseRemoteFileLoaderResult {
     const loadRemoteFile = useCallback(
-        async (downloadPath: string) => {
+        async (downloadPath: string, onProgress?: (loaded: number, total?: number) => void) => {
             try {
                 // Fetch the remote file
-                const result = await fetchFromRemote(downloadPath);
+                const result = await fetchFromRemote(downloadPath, onProgress);
                 
                 // Parse the data
                 const [data, status] = parse(result.type, result.buf);

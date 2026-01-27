@@ -3,6 +3,7 @@ import { formatNumber } from '../../../util/format';
 import { Formatter, WidgetFormat } from '../format';
 import Widget from '../Widget';
 import WidgetValue from '../WidgetValue';
+import { useLanguage } from '../../../../../i18n';
 
 export interface GcWidgetProps {
     gc: PlatformStatistics_Gc;
@@ -124,8 +125,18 @@ export default function GcWidget({ gc, title, label }: GcWidgetProps) {
         },
     };
 
+    const { t } = useLanguage();
+
+    const translateIfExists = (key: string, fallback: string) => {
+        const v = t(key);
+        return v === key ? fallback : v;
+    };
+
+    const translatedLabel = translateIfExists(`viewer.widgetLabels.${label}`, label);
+    const translatedTitle = translateIfExists(`viewer.widgetLabels.${title}`, title);
+
     return (
-        <Widget title="GC" label={label + ', ' + title}>
+        <Widget title="GC" label={`${translatedLabel}, ${translatedTitle}`}>
             <WidgetValue
                 value={gc.total}
                 label="total"

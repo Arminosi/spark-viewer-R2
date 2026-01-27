@@ -178,9 +178,14 @@ export default function TopFunctionsModal({
     if (!isOpen) return null;
 
     function handleFunctionClick(func: TopFunction) {
-        // Use replace to atomically replace all highlights with just this node
-        // This triggers only one URL update instead of two (clear + toggle)
-        highlighted.replace(func.node);
+        // Use silent replace to atomically replace highlights without updating URL
+        // so that clicking here navigates internally without modifying address bar.
+        if (highlighted.replaceSilently) {
+            highlighted.replaceSilently(func.node);
+        } else {
+            // fallback to normal replace if silent not available
+            highlighted.replace(func.node);
+        }
         // Call the callback to expand the tree
         onFunctionClick(func);
         // Close the modal
@@ -242,12 +247,24 @@ export default function TopFunctionsModal({
                                         return null;
                                     })()}
                                     <div className={styles.functionStats}>
-                                        <span className={styles.time}>
-                                            {func.selfTime.toFixed(0)} ms
-                                        </span>
-                                        <span className={styles.percentage}>
-                                            {func.percentage.toFixed(2)}%
-                                        </span>
+                                        {(() => {
+                                            const p = func.percentage;
+                                            // thresholds: <=70 green, >70 && <=90 orange, >90 red
+                                            let severityClass = styles.pctLow;
+                                            if (p > 90) severityClass = styles.pctHigh;
+                                            else if (p > 70) severityClass = styles.pctMed;
+
+                                            return (
+                                                <>
+                                                    <span className={`${styles.time} ${severityClass}`}>
+                                                        {func.selfTime.toFixed(0)} ms
+                                                    </span>
+                                                    <span className={`${styles.percentage} ${severityClass}`}>
+                                                        {func.percentage.toFixed(2)}%
+                                                    </span>
+                                                </>
+                                            );
+                                        })()}
                                     </div>
                                     {/* associated sources: show first by default, allow expand */}
                                     <div className={styles.sourceList} onClick={e => e.stopPropagation()}>

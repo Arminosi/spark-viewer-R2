@@ -5,7 +5,8 @@ import {
     SystemStatistics as SystemStatisticsProto,
     SystemStatistics_NetInterface,
 } from '../../../proto/spark_pb';
-import { formatBytes, formatNumber } from '../../util/format';
+import { formatNumber, formatBytesLocalized } from '../../util/format';
+import { useLanguage } from '../../../../i18n';
 import { Formatter, WidgetFormat } from '../widgets/format';
 import Widget from '../widgets/Widget';
 import WidgetValue from '../widgets/WidgetValue';
@@ -17,6 +18,7 @@ export interface NetworkStatisticsProps {
 export default function NetworkStatistics({
     systemStatistics,
 }: NetworkStatisticsProps) {
+    const { t } = useLanguage();
     return (
         <>
             <h2>Network Interfaces</h2>
@@ -98,6 +100,7 @@ const NetworkInterfaceWidget = ({
     format,
     values,
 }: NetworkInterfaceWidgetProps) => {
+    const { t } = useLanguage();
     const formatter: Formatter = {
         color: value => {
             if (value <= 0) {
@@ -108,7 +111,7 @@ const NetworkInterfaceWidget = ({
         },
         format: value => {
             if (format === 'bytes/sec') {
-                return formatBytes(value);
+                return formatBytesLocalized(value, t);
             } else {
                 return formatNumber(value);
             }
