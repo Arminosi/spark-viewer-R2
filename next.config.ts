@@ -1,13 +1,12 @@
 import type { NextConfig } from 'next';
-import { env } from './src/env';
 
 const nextConfig: NextConfig = {
-    // 1. 移除 'standalone'，EdgeOne 的 OpenNext 插件不需要这个
-    // output: 'standalone', 
-
-    // 2. 开启实验性压缩，减少部署包体积
-    experimental: {
-        serverMinification: true,
+    // 1. 强制静态导出，这样就不会产生任何“云函数”，部署会秒过
+    output: 'export', 
+    
+    // 2. 图像优化在静态导出时需要关闭或使用自定义 loader
+    images: {
+        unoptimized: true,
     },
 
     webpack: config => {
@@ -17,21 +16,7 @@ const nextConfig: NextConfig = {
         });
         return config;
     },
-    rewrites: async () => [
-        {
-            source: '/docs/:path*',
-            destination: env.SPARK_DOCS_URL + '/:path*',
-        },
-        {
-            source: '/thumb/:slug',
-            destination: env.SPARK_THUMBNAIL_SERVICE_URL + '/:slug',
-        },
-        {
-            source: '/:slug',
-            has: [{ type: 'query', key: 'raw' }],
-            destination: env.SPARK_JSON_SERVICE_URL + '/:slug',
-        },
-    ],
+    // 注意：这里删除了 rewrites，我们去 EdgeOne 后台配
 };
 
 export default nextConfig;
