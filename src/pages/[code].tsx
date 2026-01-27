@@ -1,4 +1,3 @@
-import { GetServerSidePropsContext } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { Suspense } from 'react';
@@ -51,13 +50,3 @@ const ThumbnailMetaTags = ({ code }: ViewerPageProps) => {
         </Head>
     );
 };
-
-// Just pass the query parameter to the component during SSR
-// (seems like a bit of a waste, but it's the only way as this page is a dynamic route)
-export async function getServerSideProps({
-    query,
-    res,
-}: GetServerSidePropsContext) {
-    res.setHeader('Cache-Control', 'public, maxage=31536000');
-    return { props: { code: query.code } };
-}
