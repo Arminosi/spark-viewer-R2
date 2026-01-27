@@ -29,13 +29,31 @@ const RemoteViewer: NextPageWithLayout = () => {
                 // Generate a pseudo-code for the URL and redirect to the normal viewer
                 const pseudoCode = `remote_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
                 
-                // Store the data in sessionStorage temporarily
+                // Store the data in sessionStorage temporarily. If this
+                // exceeds the quota, fall back to IndexedDB and store a
+                // small pointer in sessionStorage.
+                const remoteKey = `remote_${pseudoCode}`;
                 const sessionData = {
                     data: Array.from(new Uint8Array(result.buf)),
                     type: result.type,
                     metadata: data.metadata,
                 };
-                sessionStorage.setItem(`remote_${pseudoCode}`, JSON.stringify(sessionData));
+
+                try {
+                    sessionStorage.setItem(remoteKey, JSON.stringify(sessionData));
+                } catch (e) {
+                    console.warn('sessionStorage quota exceeded, falling back to IndexedDB', e);
+                    try {
+                        const { idbPut } = await import('../viewer/common/util/idb');
+                        await idbPut(remoteKey, result.buf);
+                        // Store a small marker so the viewer knows to read from IDB
+                        const marker = { indexed: true, type: result.type, metadata: data.metadata };
+                        sessionStorage.setItem(remoteKey, JSON.stringify(marker));
+                    } catch (idbError) {
+                        console.error('Failed to persist remote file in IndexedDB:', idbError);
+                        throw idbError;
+                    }
+                }
                 
                 // Redirect to the normal viewer with the pseudo-code
                 router.replace(`/${pseudoCode}?remote=true`);
