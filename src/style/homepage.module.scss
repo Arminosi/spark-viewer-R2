@@ -121,3 +121,40 @@
         font-style: italic;
     }
 }
+
+.homepage-actions {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0;
+}
+
+.remote-open-button {
+    background: linear-gradient(180deg, #ffd966 0%, #ffc107 100%);
+    color: #0b0b0b;
+    border: none;
+    padding: 14px 22px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+    cursor: pointer;
+    transition: transform 120ms ease, box-shadow 120ms ease, opacity 120ms ease;
+}
+
+.remote-open-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
+}
+
+.remote-open-button:active {
+    transform: translateY(0);
+    opacity: 0.95;
+}
+
+@media (max-width: 640px) {
+    .remote-open-button {
+        width: 90%;
+        padding: 12px 16px;
+        font-size: 1rem;
+    }
+}
