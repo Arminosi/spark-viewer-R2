@@ -50,6 +50,10 @@ export const enViewerDetails = {
       title: 'Info Points:',
       description: 'Select whether info points should be shown.',
     },
+    topFunctions: {
+      button: 'Top Functions',
+      title: 'Top Functions by Time',
+    },
   },
   metadataTabs: {
     platform: 'Platform',

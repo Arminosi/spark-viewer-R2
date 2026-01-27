@@ -12,6 +12,8 @@ import {
     LOADING_DATA,
 } from '../viewer/common/logic/status';
 import { NextPageWithLayout } from './_app';
+import { env } from '../env';
+import { RemoteReport } from '../hooks/useRemoteReports';
 
 const SparkViewer = dynamic(() => import('../viewer/SparkViewer'), {
     ssr: false,
@@ -21,6 +23,7 @@ const RemoteViewer: NextPageWithLayout = () => {
     const router = useRouter();
     const [status, setStatus] = useState(LOADING_DATA);
     const [initialResult, setInitialResult] = useState<FetchResult | null>(null);
+    const [errorMessage, setErrorMessage] = useState<string>('');
 
     useEffect(() => {
         const downloadPath = router.query.path as string;
@@ -38,13 +41,43 @@ const RemoteViewer: NextPageWithLayout = () => {
                 setStatus(newStatus);
             } catch (error) {
                 console.error('Failed to load remote file:', error);
+
+                // Try to fetch the latest report as fallback
+                try {
+                    setErrorMessage('文件加载失败，正在尝试加载最新报告...');
+                    const response = await fetch(`${env.NEXT_PUBLIC_SPARK_MONITOR_URL}/list`);
+                    if (response.ok) {
+                        const responseData = await response.json();
+                        const reports: RemoteReport[] = responseData.value || responseData;
+
+                        if (reports && reports.length > 0) {
+                            // Sort by uploaded date (newest first)
+                            const sortedReports = [...reports].sort((a, b) =>
+                                new Date(b.uploaded).getTime() - new Date(a.uploaded).getTime()
+                            );
+                            const latestReport = sortedReports[0];
+
+                            // Try to load the latest report
+                            const latestResult = await fetchFromRemote(latestReport.downloadPath);
+                            const [, latestStatus] = parse(latestResult.type, latestResult.buf);
+
+                            setInitialResult(latestResult);
+                            setStatus(latestStatus);
+                            setErrorMessage('');
+                            return;
+                        }
+                    }
+                } catch (fallbackError) {
+                    console.error('Failed to load latest report:', fallbackError);
+                }
+
                 setStatus(FAILED_DATA);
             }
         })();
     }, [router.query.path, router]);
 
     if (status === LOADING_DATA) {
-        return <TextBox>正在加载远程报告...</TextBox>;
+        return <TextBox>{errorMessage || '正在加载远程报告...'}</TextBox>;
     }
 
     if (status === FAILED_DATA) {

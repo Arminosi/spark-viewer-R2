@@ -55,7 +55,10 @@
                 }
 
                 &.bookmarked {
-                    box-shadow: inset 0 0 0 100vmax rgba(134, 0, 0, 0.5);
+                    background: linear-gradient(90deg, rgba(255, 193, 7, 0.15) 0%, rgba(255, 193, 7, 0.05) 100%);
+                    border-left: 3px solid #ffc107;
+                    padding-left: 2px;
+                    box-shadow: 0 0 8px rgba(255, 193, 7, 0.3);
                 }
             }
 

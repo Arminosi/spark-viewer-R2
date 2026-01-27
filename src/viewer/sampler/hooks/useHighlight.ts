@@ -7,6 +7,7 @@ export interface Highlight {
     check: (node: VirtualNode) => boolean;
     has: (node: VirtualNode) => boolean;
     clear: () => void;
+    replace: (node: VirtualNode) => void;
 }
 
 export default function useHighlight(): Highlight {
@@ -85,7 +86,17 @@ export default function useHighlight(): Highlight {
         [setHighlighted]
     );
 
-    return { toggle, check, has, clear };
+    // Replaces all highlights with a single node (atomic operation, only one URL update)
+    const replace: Highlight['replace'] = useCallback(
+        node => {
+            const newSet = new Set<number>();
+            setAdd(newSet, node.getId());
+            setHighlighted(newSet);
+        },
+        [setHighlighted]
+    );
+
+    return { toggle, check, has, clear, replace };
 }
 
 // some functions for sets which accept either 'value' or '[value1, value2]' parameters
