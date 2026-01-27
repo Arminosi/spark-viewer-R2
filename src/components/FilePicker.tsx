@@ -11,10 +11,17 @@ export interface FilePickerProps {
 export default function FilePicker({ callback }: FilePickerProps) {
     const { t } = useLanguage();
     const { getRootProps, getInputProps } = useDropzone({
-        accept: { '': ['.sparkprofile', '.sparkheap'] },
+        // react-dropzone requires a MIME type key; use a generic binary MIME
+        // so extension matching still works for local files.
+        accept: { 'application/octet-stream': ['.sparkprofile', '.sparkheap'] },
         multiple: false,
         onDropAccepted: files => {
             callback(files[0]);
+        },
+        onDropRejected: rejected => {
+            // Log rejected files for debugging
+            // eslint-disable-next-line no-console
+            console.warn('Rejected files', rejected);
         },
     });
 

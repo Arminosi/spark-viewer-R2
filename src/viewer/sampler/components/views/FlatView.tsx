@@ -15,6 +15,9 @@ import BottomUpButton from './button/BottomUpButton';
 import LabelModeButton from './button/LabelModeButton';
 import SelfTimeModeButton from './button/SelfTimeModeButton';
 import FlatViewHeader from './header/FlatViewHeader';
+import TopFunctionsButton from './button/TopFunctionsButton';
+import TopFunctionsModal from '../modal/TopFunctionsModal';
+import { getTopFunctions, TopFunction } from '../../utils/topFunctions';
 
 export const BottomUpContext = createContext(false);
 
@@ -34,6 +37,8 @@ export default function FlatView({
     const labelMode = useContext(LabelModeContext);
     const [bottomUp, setBottomUp] = useState(false);
     const [selfTimeMode, setSelfTimeMode] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [topFunctions, setTopFunctions] = useState<TopFunction[]>([]);
 
     const view = selfTimeMode
         ? viewData?.flatSelfTime
@@ -51,6 +56,11 @@ export default function FlatView({
                     selfTimeMode={selfTimeMode}
                     setSelfTimeMode={setSelfTimeMode}
                 />
+                <TopFunctionsButton onClick={() => {
+                    const functions = getTopFunctions(data, 20);
+                    setTopFunctions(functions);
+                    setIsModalOpen(true);
+                }} />
             </FlatViewHeader>
             <hr />
             {!view ? (
@@ -68,6 +78,24 @@ export default function FlatView({
                     </BottomUpContext.Provider>
                 </div>
             )}
+            <TopFunctionsModal
+                topFunctions={topFunctions}
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onFunctionClick={(func) => {
+                    const idVal = func.node.getId();
+                    const id = `node-${Array.isArray(idVal) ? (idVal as number[]).join('-') : String(idVal)}`;
+                    const tryScroll = (attempt = 0) => {
+                        const el = document.getElementById(id);
+                        if (el) {
+                            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        } else if (attempt < 8) {
+                            setTimeout(() => tryScroll(attempt + 1), 100);
+                        }
+                    };
+                    setTimeout(() => tryScroll(), 50);
+                }}
+            />
         </div>
     );
 }

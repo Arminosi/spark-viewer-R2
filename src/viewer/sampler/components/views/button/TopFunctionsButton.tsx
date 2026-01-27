@@ -12,8 +12,8 @@ export default function TopFunctionsButton({
     const { t } = useLanguage();
 
     return (
-        <div className="button">
-            <button onClick={onClick}>
+        <div className="button top-functions-button">
+            <button onClick={onClick} aria-label={t('viewer.sampler.topFunctions.button')}>
                 <FontAwesomeIcon icon={faListOl} />{' '}
                 <span>{t('viewer.sampler.topFunctions.button')}</span>
             </button>

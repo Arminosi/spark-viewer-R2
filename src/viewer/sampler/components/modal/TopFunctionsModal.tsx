@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContext } from 'react';
 import { useLanguage } from '../../../../i18n';
 import type { TopFunction } from '../../utils/topFunctions';
-import { HighlightedContext } from '../SamplerContext';
+import { HighlightedContext, MetadataContext } from '../SamplerContext';
 import styles from './TopFunctionsModal.module.scss';
 
 export interface TopFunctionsModalProps {
@@ -21,6 +21,7 @@ export default function TopFunctionsModal({
 }: TopFunctionsModalProps) {
     const { t } = useLanguage();
     const highlighted = useContext(HighlightedContext)!;
+    const metadata = useContext(MetadataContext)!;
 
     if (!isOpen) return null;
 
@@ -66,6 +67,18 @@ export default function TopFunctionsModal({
                                     <div className={styles.functionName}>
                                         {func.name}
                                     </div>
+                                    {(() => {
+                                        const src = func.node.getSource();
+                                        const md = src && metadata ? (metadata as any).sources?.[src] : undefined;
+                                        if (md) {
+                                            return (
+                                                <div className={styles.functionMeta}>
+                                                    {md.name}{md.version ? ' ' + md.version : ''}
+                                                </div>
+                                            );
+                                        }
+                                        return null;
+                                    })()}
                                     <div className={styles.functionStats}>
                                         <span className={styles.time}>
                                             {func.selfTime.toFixed(0)} ms

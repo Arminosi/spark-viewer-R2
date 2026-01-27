@@ -28,9 +28,20 @@ export default function AllView({ data, setLabelMode }: AllViewProps) {
     }
 
     function handleFunctionClick(func: TopFunction) {
-        // The modal will handle highlighting and closing
-        // Here we just need to scroll to the node if needed
-        // The tree will auto-expand because the node is highlighted
+        // The modal will handle highlighting and closing.
+        // Wait a short moment for the tree to auto-expand, then scroll to the node.
+        const idVal = func.node.getId();
+        const id = `node-${Array.isArray(idVal) ? (idVal as number[]).join('-') : String(idVal)}`;
+        // Try to scroll when element appears (retry a few times)
+        const tryScroll = (attempt = 0) => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else if (attempt < 8) {
+                setTimeout(() => tryScroll(attempt + 1), 100);
+            }
+        };
+        setTimeout(() => tryScroll(), 50);
     }
 
     return (

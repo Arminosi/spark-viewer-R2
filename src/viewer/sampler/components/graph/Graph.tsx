@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLanguage } from '../../../../i18n';
 import { WindowStatistics } from '../../../proto/spark_pb';
 import { TimeSelector } from '../../hooks/useTimeSelector';
 import GraphChart from './GraphChart';
@@ -80,15 +81,13 @@ export default function Graph({
 
     const scale = times.length - 1;
 
+    const { t } = useLanguage();
+
     return (
         <div className="graph">
             <div className="header">
-                <h2>Refine</h2>
-                <p>
-                    The graph below shows some key metrics over the course of
-                    the profile. You can drag + select with your cursor to
-                    refine the profile to a specific time period.
-                </p>
+                <h2>{t('viewer.sampler.refine.title')}</h2>
+                <p>{t('viewer.sampler.refine.description')}</p>
             </div>
 
             <GraphChart

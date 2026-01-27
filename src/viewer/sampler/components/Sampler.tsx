@@ -32,9 +32,12 @@ const Graph = dynamic(() => import('./graph/Graph'));
 
 import 'react-contexify/dist/ReactContexify.css';
 import { Tooltip } from 'react-tooltip';
+import { formatTime, humanFriendlyPercentage } from '../../common/util/format';
 import useInfoPoints from '../hooks/useInfoPoints';
 import useMappings from '../hooks/useMappings';
 import SettingsMenu from './settings/SettingsMenu';
+import { useLanguage } from '../../../i18n';
+import SourceInfoModal from './modal/SourceInfoModal';
 
 export interface SamplerProps {
     data: SamplerData;
@@ -61,6 +64,8 @@ export default function Sampler({
     const mappings = useMappings(metadata);
     const infoPoints = useInfoPoints();
     const [flameData, setFlameData] = useState<VirtualNode>();
+    const [showSourceModal, setShowSourceModal] = useState(false);
+    const [sourceNode, setSourceNode] = useState<VirtualNode | undefined>();
     const [view, setView] = useState<View>(VIEW_ALL);
     const [showGraph, setShowGraph] = useToggle('prefShowGraph', true);
     const [showSettings, setShowSettings] = useState<boolean>(false);
@@ -117,6 +122,106 @@ export default function Sampler({
         if (!node) return;
         setFlameData(node);
     }
+
+    function handleShowSource(args: ItemParams<{ node: VirtualNode }>) {
+        const node = args.props?.node;
+        if (!node) return;
+        setSourceNode(node);
+        setShowSourceModal(true);
+    }
+
+    function handleCopyFunctionName(args: ItemParams<{ node: VirtualNode }>) {
+        const node = args.props?.node;
+        if (!node) return;
+
+        const details = node.getDetails();
+        let name = '';
+        if (details.type === 'thread') {
+            name = details.name;
+        } else {
+            name = `${details.className}.${details.methodName}`;
+            if (details.lineNumber !== undefined && details.lineNumber !== null) {
+                name += `:${details.lineNumber}`;
+            }
+        }
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(name).catch(() => {
+                const ta = document.createElement('textarea');
+                ta.value = name;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                ta.remove();
+            });
+        } else {
+            const ta = document.createElement('textarea');
+            ta.value = name;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            ta.remove();
+        }
+    }
+
+    function handleCopyParentChain(args: ItemParams<{ node: VirtualNode }>) {
+        const node = args.props?.node;
+        if (!node) return;
+
+        // Build chain from this node up to the topmost parent
+        const chain: VirtualNode[] = [];
+        let cur: VirtualNode | undefined = node;
+        while (cur) {
+            chain.push(cur);
+            const parents = cur.getParents();
+            cur = parents && parents.length > 0 ? parents[0] : undefined;
+        }
+
+        // We want root -> ... -> current, so reverse the collected chain
+        const ordered = chain.slice().reverse();
+        const root = ordered[0];
+        const rootTime = root ? timeSelector.getTime(root) : 0;
+
+        const lines = ordered.map((n, idx) => {
+            const details = n.getDetails();
+            let name = '';
+            if (details.type === 'thread') {
+                name = details.name;
+            } else {
+                name = `${details.className}.${details.methodName}`;
+                if (details.lineNumber !== undefined && details.lineNumber !== null) {
+                    name += `:${details.lineNumber}`;
+                }
+            }
+            const t = timeSelector.getTime(n);
+            const pct = rootTime ? t / rootTime : 0;
+            const indent = '  '.repeat(idx); // two spaces per level
+            return `${indent}${name} — ${formatTime(t)} ms (${humanFriendlyPercentage(pct)})`;
+        });
+
+        const text = lines.join('\n');
+
+        // Try clipboard API, fall back to textarea
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).catch(() => {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                ta.remove();
+            });
+        } else {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            ta.remove();
+        }
+    }
+
+    const { t } = useLanguage();
 
     const supported =
         metadata?.platform?.sparkVersion && metadata.platform.sparkVersion >= 2;
@@ -225,10 +330,21 @@ export default function Sampler({
             )}
 
             <Menu id={'sampler-cm'} theme="dark">
-                <Item onClick={handleFlame}>View as Flame Graph</Item>
-                <Item onClick={handleHighlight}>Toggle bookmark</Item>
-                <Item onClick={handleHighlightClear}>Clear all bookmarks</Item>
+                <Item onClick={handleFlame}>{t('viewer.contextMenu.viewAsFlame')}</Item>
+                <Item onClick={handleShowSource}>{t('viewer.contextMenu.showSource')}</Item>
+                <Item onClick={handleCopyParentChain}>{t('viewer.contextMenu.copyFullChain')}</Item>
+                <Item onClick={handleCopyFunctionName}>{t('viewer.contextMenu.copyFunctionName')}</Item>
+                <Item onClick={handleHighlight}>{t('viewer.contextMenu.toggleBookmark')}</Item>
+                <Item onClick={handleHighlightClear}>{t('viewer.contextMenu.clearBookmarks')}</Item>
             </Menu>
+
+            <SourceInfoModal
+                isOpen={showSourceModal}
+                onClose={() => setShowSourceModal(false)}
+                node={sourceNode}
+                metadata={metadata}
+                highlighted={highlighted}
+            />
         </div>
     );
 }

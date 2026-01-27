@@ -31,6 +31,7 @@ const BaseNode = React.memo(({ parents, node, forcedTime }: BaseNodeProps) => {
     const highlighted = useContext(HighlightedContext)!;
     const searchQuery = useContext(SearchQueryContext)!;
     const timeSelector = useContext(TimeSelectorContext)!;
+    // correct metadata context import below
 
     const bottomUp = useContext(BottomUpContext) && parents.length !== 0;
 
@@ -129,9 +130,12 @@ const BaseNode = React.memo(({ parents, node, forcedTime }: BaseNodeProps) => {
               : parentTime / nodeTime;
         importance = parentTime !== nodeTime ? significance : 0;
     }
+    
+    const idVal = node.getId();
+    const elementId = `node-${Array.isArray(idVal) ? (idVal as number[]).join('-') : String(idVal)}`;
 
     return (
-        <li className={classNames}>
+        <li id={elementId} className={classNames}>
             <div
                 className={nodeInfoClassNames}
                 onClick={handleClick}
