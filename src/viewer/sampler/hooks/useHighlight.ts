@@ -8,11 +8,13 @@ export interface Highlight {
     has: (node: VirtualNode) => boolean;
     clear: () => void;
     replace: (node: VirtualNode) => void;
+    replaceSilently?: (node: VirtualNode) => void;
 }
 
 export default function useHighlight(): Highlight {
     const router = useRouter();
     const navigatingRef = useRef(false);
+    const skipUrlRef = useRef(false);
     const [highlighted, setHighlighted] = useState(() => {
         const set = new Set<number>();
         const ids = router.query['hl'] as string;
@@ -70,6 +72,13 @@ export default function useHighlight(): Highlight {
         // the user's navigation (this prevents the URL from being immediately
         // overwritten while clicking links).
         if (navigatingRef.current) return;
+
+        // If a caller requested to skip the next URL update, consume the flag
+        // and do not push to the router.
+        if (skipUrlRef.current) {
+            skipUrlRef.current = false;
+            return;
+        }
 
         // Preserve other query parameters (e.g. `path`, `remote`, `code`) when
         // adding/removing `hl` to avoid clobbering remote loads and causing a
@@ -142,7 +151,18 @@ export default function useHighlight(): Highlight {
         [setHighlighted]
     );
 
-    return { toggle, check, has, clear, replace };
+    const replaceSilently: Highlight['replaceSilently'] = useCallback(
+        node => {
+            const newSet = new Set<number>();
+            setAdd(newSet, node.getId());
+            // Mark to skip URL update on next effect run
+            skipUrlRef.current = true;
+            setHighlighted(newSet);
+        },
+        [setHighlighted]
+    );
+
+    return { toggle, check, has, clear, replace, replaceSilently };
 }
 
 // some functions for sets which accept either 'value' or '[value1, value2]' parameters

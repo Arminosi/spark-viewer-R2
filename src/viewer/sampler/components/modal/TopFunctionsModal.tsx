@@ -178,9 +178,14 @@ export default function TopFunctionsModal({
     if (!isOpen) return null;
 
     function handleFunctionClick(func: TopFunction) {
-        // Use replace to atomically replace all highlights with just this node
-        // This triggers only one URL update instead of two (clear + toggle)
-        highlighted.replace(func.node);
+        // Use silent replace to atomically replace highlights without updating URL
+        // so that clicking here navigates internally without modifying address bar.
+        if (highlighted.replaceSilently) {
+            highlighted.replaceSilently(func.node);
+        } else {
+            // fallback to normal replace if silent not available
+            highlighted.replace(func.node);
+        }
         // Call the callback to expand the tree
         onFunctionClick(func);
         // Close the modal

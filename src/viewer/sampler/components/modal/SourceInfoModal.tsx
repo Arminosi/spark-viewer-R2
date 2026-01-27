@@ -113,7 +113,11 @@ export default function SourceInfoModal({
 
         // replace highlights with this node (so parents auto-expand)
         try {
-            highlighted?.replace(rep);
+            if (highlighted && typeof highlighted.replaceSilently === 'function') {
+                highlighted.replaceSilently(rep);
+            } else {
+                highlighted?.replace(rep);
+            }
         } catch (e) {
             // ignore
         }
