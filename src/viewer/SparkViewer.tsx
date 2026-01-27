@@ -9,6 +9,7 @@ import {
     useState,
 } from 'react';
 import TextBox from '../components/TextBox';
+import { useLanguage } from '../i18n';
 import { SelectedFileContext } from '../pages/_app';
 import { createExportCallback, ExportCallback } from './common/logic/export';
 import {
@@ -59,6 +60,7 @@ export default function SparkViewer({ initialResult }: SparkViewerProps) {
     const [data, setData] = useState<SamplerData | HeapData | HealthData>();
     const [metadata, setMetadata] = useState<SparkMetadata>();
     const [exportCallback, setExportCallback] = useState<ExportCallback>();
+    const { t } = useLanguage();
 
     const fetchUpdatedData = useCallback(
         async (payloadId: string) => {
@@ -215,8 +217,16 @@ export default function SparkViewer({ initialResult }: SparkViewerProps) {
         case FAILED_DATA:
             return (
                 <TextBox extraClassName="loading-error">
-                    Unable to load the data. Perhaps it expired? Are you using a
-                    recent version?
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div>
+                            {t('viewer.failedLoad.message')}
+                        </div>
+                        <div>
+                            <button onClick={() => router.push('/')} style={{ padding: '6px 10px', borderRadius: 4, background: 'linear-gradient(90deg,#ffc93a,#ffb300)', border: 'none', color: '#111', fontWeight: 600 }}> 
+                                {t('viewer.failedLoad.goHome')}
+                            </button>
+                        </div>
+                    </div>
                 </TextBox>
             );
         case LOADED_PROFILE_DATA:

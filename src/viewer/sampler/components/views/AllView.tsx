@@ -68,6 +68,7 @@ export default function AllView({ data, setLabelMode }: AllViewProps) {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 onFunctionClick={handleFunctionClick}
+                data={data}
             />
         </div>
     );

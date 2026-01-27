@@ -90,6 +90,11 @@ export const zh = {
     graph: {
       refine: '优化',
     },
+    failedLoad: {
+      message: '无法加载数据。可能已过期；请确认你正在使用较新的版本。',
+      reloadLatest: '加载最新报告',
+      goHome: '返回主页',
+    },
     sourceModal: {
       title: '来源信息',
       noSource: '此函数没有关联来源',

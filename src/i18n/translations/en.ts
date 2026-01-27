@@ -90,6 +90,11 @@ export const en = {
     graph: {
       refine: 'Refine',
     },
+    failedLoad: {
+      message: 'Unable to load the data. Perhaps it expired? Are you using a recent version?',
+      reloadLatest: 'Load latest report',
+      goHome: 'Go to homepage',
+    },
     sourceModal: {
       title: 'Source Information',
       noSource: 'This function has no associated source',

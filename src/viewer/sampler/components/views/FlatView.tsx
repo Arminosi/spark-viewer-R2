@@ -95,6 +95,7 @@ export default function FlatView({
                     };
                     setTimeout(() => tryScroll(), 50);
                 }}
+                data={data}
             />
         </div>
     );

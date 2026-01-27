@@ -43,9 +43,6 @@ export default function Graph({
         return keys;
     });
 
-    if (!show) {
-        return null;
-    }
 
     const maxTime = Math.max(...times);
     const data: ChartDataWrapper[] = statisticKeys.map((statisticName, i) => {
@@ -82,6 +79,10 @@ export default function Graph({
     const scale = times.length - 1;
 
     const { t } = useLanguage();
+
+    if (!show) {
+        return null;
+    }
 
     return (
         <div className="graph">

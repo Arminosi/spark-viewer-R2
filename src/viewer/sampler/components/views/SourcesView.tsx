@@ -83,6 +83,7 @@ export default function SourcesView({
                 };
                 setTimeout(() => tryScroll(), 50);
             }}
+            data={data}
         />
         </>
     );
