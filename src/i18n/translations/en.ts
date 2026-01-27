@@ -1,0 +1,84 @@
+import { enViewerDetails } from './en-viewer-details';
+import { enPlatformInfo } from './en-platform-info';
+
+export const en = {
+  common: {
+    loading: 'Loading...',
+    error: 'Error',
+    success: 'Success',
+    cancel: 'Cancel',
+    confirm: 'Confirm',
+    close: 'Close',
+  },
+  header: {
+    title: 'Artstyle | Spark Profiler',
+    remoteReports: 'Remote Reports',
+    openRemoteReports: 'Open Remote Reports Library',
+    switchLanguage: 'Switch Language',
+  },
+  modal: {
+    title: 'Remote Reports Library',
+    startDate: 'Start Date',
+    endDate: 'End Date',
+    clearFilters: 'Clear Filters',
+    loading: 'Loading remote reports...',
+    connectionError: 'Unable to connect to remote report server',
+    noMatchingReports: 'No reports match the filter criteria',
+    noReports: 'No remote reports available',
+    generatedTime: 'Generated Time',
+    fileSize: 'File Size',
+    actions: 'Actions',
+    load: 'Load',
+    showing: 'Showing',
+    of: '/',
+    reports: 'reports',
+  },
+  filePicker: {
+    dragDrop: 'Drag & drop a profile/heap file here or click to select',
+    onlyAccepted: '(only',
+    or: 'or',
+    files: 'files are accepted)',
+  },
+  footer: {
+    poweredBy: 'Powered by',
+    and: 'and',
+    built: 'built',
+  },
+  viewer: {
+    allView: {
+      title: 'All View',
+      description: 'This is the default profiler view. It shows the entire profile as an expandable tree.',
+    },
+    flatView: {
+      title: 'Flat View',
+      description: 'This view shows a flattened representation of the profile, where the top 250 method calls are listed.',
+    },
+    sourcesView: {
+      modsTitle: 'Mods View',
+      pluginsTitle: 'Plugins View',
+      modsDescription: 'This view shows a filtered representation of the profile broken down by mod.',
+      pluginsDescription: 'This view shows a filtered representation of the profile broken down by plugin.',
+      other: 'Other',
+      otherModsDescription: 'The following other mods are installed, but didn\'t show up in this profile. Yay!',
+      otherPluginsDescription: 'The following other plugins are installed, but didn\'t show up in this profile. Yay!',
+    },
+    controls: {
+      exportProfile: 'Export this profile to a local file',
+      toggleWidgets: 'Click to toggle the widgets',
+      toggleMetadata: 'Click to toggle the detailed metadata display',
+    },
+    metadata: {
+      networkInterfaces: 'Network Interfaces',
+      pluginsMods: 'Plugins/Mods',
+      dataPacks: 'Data Packs',
+      gameRuleOverrides: 'Game Rule Overrides',
+      gameRuleDefaults: 'Game Rule Defaults',
+      memoryAreas: 'Memory Areas',
+    },
+    graph: {
+      refine: 'Refine',
+    },
+    ...enViewerDetails,
+  },
+  ...enPlatformInfo,
+};

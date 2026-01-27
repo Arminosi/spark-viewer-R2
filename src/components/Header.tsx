@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import RemoteReportsModal from './RemoteReportsModal';
 import SparkLogo from '../assets/spark-logo.svg';
+import { useLanguage } from '../i18n';
 
 import styles from '../style/header.module.scss';
 
@@ -13,6 +14,7 @@ export interface HeaderProps {
 export default function Header({ title = 'Artstyle | Spark Profiler' }: HeaderProps) {
     const router = useRouter();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const { t, language, setLanguage } = useLanguage();
     
     // 检查是否在查看器页面（有code参数或远程加载）
     const isViewerPage = router.pathname === '/[code]' || 
@@ -29,13 +31,20 @@ export default function Header({ title = 'Artstyle | Spark Profiler' }: HeaderPr
                 
                 {isViewerPage && (
                     <div className={styles.controls}>
-                        <button 
+                        <button
                             className={styles.remoteButton}
                             onClick={() => setIsModalOpen(true)}
-                            title="打开远程报告库"
+                            title={t('header.openRemoteReports')}
                         >
                             <span className={styles.buttonIcon}>📡</span>
-                            <span className={styles.buttonText}>远程报告</span>
+                            <span className={styles.buttonText}>{t('header.remoteReports')}</span>
+                        </button>
+                        <button
+                            className={styles.languageButton}
+                            onClick={() => setLanguage(language === 'zh-CN' ? 'en' : 'zh-CN')}
+                            title={t('header.switchLanguage')}
+                        >
+                            {language === 'zh-CN' ? '中文' : 'EN'}
                         </button>
                     </div>
                 )}

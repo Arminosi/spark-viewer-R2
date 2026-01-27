@@ -6,6 +6,7 @@ import {
     objectMap,
     unwrapSamplerMetadata,
 } from '../../util/metadata';
+import { useLanguage } from '../../../../i18n';
 import ExtraPlatformMetadata from './ExtraPlatformMetadata';
 import GameRules from './GameRules';
 import JvmStartupArgs from './JvmStartupArgs';
@@ -21,6 +22,7 @@ interface MetadataDetailProps {
 }
 
 export default function MetadataDetail({ metadata }: MetadataDetailProps) {
+    const { t } = useLanguage();
     const {
         platform,
         platformStatistics,
@@ -63,21 +65,21 @@ export default function MetadataDetail({ metadata }: MetadataDetailProps) {
     const { runningTime, numberOfTicks, numberOfIncludedTicks, samplerEngine } =
         unwrapSamplerMetadata(metadata);
 
-    const [view, setView] = useState('Platform');
+    const [view, setView] = useState(t('viewer.metadataTabs.platform'));
     const views: Record<string, () => boolean> = {
-        'Platform': () => true,
-        'Memory': () =>
+        [t('viewer.metadataTabs.platform')]: () => true,
+        [t('viewer.metadataTabs.memory')]: () =>
             !!platformStatistics?.memory?.heap ||
             !!platformStatistics?.memory?.pools?.length,
-        'Network': () => !!Object.keys(systemStatistics?.net ?? {}).length,
-        'JVM Flags': () => !!systemStatistics?.java?.vmArgs,
-        'Configurations': () => !!parsedConfigurations,
-        'World': () =>
+        [t('viewer.metadataTabs.network')]: () => !!Object.keys(systemStatistics?.net ?? {}).length,
+        [t('viewer.metadataTabs.jvmFlags')]: () => !!systemStatistics?.java?.vmArgs,
+        [t('viewer.metadataTabs.configurations')]: () => !!parsedConfigurations,
+        [t('viewer.metadataTabs.world')]: () =>
             !!platformStatistics?.world &&
             !!platformStatistics?.world?.totalEntities,
-        'Misc': () => !!parsedExtraMetadata,
-        'Game Rules': () => !!platformStatistics?.world?.gameRules.length,
-        'Plugins/Mods': () =>
+        [t('viewer.metadataTabs.misc')]: () => !!parsedExtraMetadata,
+        [t('viewer.metadataTabs.gameRules')]: () => !!platformStatistics?.world?.gameRules.length,
+        [t('viewer.metadataTabs.pluginsMods')]: () =>
             !!platformStatistics?.world?.dataPacks.length ||
             !!Object.keys(metadata.sources).length,
     };
@@ -103,7 +105,7 @@ export default function MetadataDetail({ metadata }: MetadataDetailProps) {
             </div>
 
             <div className="metadata-detail-content">
-                {view === 'Platform' ? (
+                {view === t('viewer.metadataTabs.platform') ? (
                     <PlatformStatistics
                         platform={platform!}
                         platformStatistics={platformStatistics!}
@@ -115,33 +117,33 @@ export default function MetadataDetail({ metadata }: MetadataDetailProps) {
                         numberOfIncludedTicks={numberOfIncludedTicks}
                         engine={samplerEngine}
                     />
-                ) : view === 'Memory' ? (
+                ) : view === t('viewer.metadataTabs.memory') ? (
                     <MemoryStatistics
                         memory={platformStatistics?.memory!}
                         gc={platformStatistics?.gc!}
                     />
-                ) : view === 'Network' ? (
+                ) : view === t('viewer.metadataTabs.network') ? (
                     <NetworkStatistics systemStatistics={systemStatistics!} />
-                ) : view === 'JVM Flags' ? (
+                ) : view === t('viewer.metadataTabs.jvmFlags') ? (
                     <JvmStartupArgs systemStatistics={systemStatistics!} />
-                ) : view === 'Configurations' ? (
+                ) : view === t('viewer.metadataTabs.configurations') ? (
                     <ServerConfigurations
                         parsedConfigurations={parsedConfigurations!}
                     />
-                ) : view === 'World' ? (
+                ) : view === t('viewer.metadataTabs.world') ? (
                     <WorldStatistics
                         worldStatistics={platformStatistics!.world!}
                     />
-                ) : view === 'Game Rules' ? (
+                ) : view === t('viewer.metadataTabs.gameRules') ? (
                     <GameRules
                         gameRules={platformStatistics?.world?.gameRules!}
                     />
-                ) : view === 'Plugins/Mods' ? (
+                ) : view === t('viewer.metadataTabs.pluginsMods') ? (
                     <PluginsModsList
                         plugins={Object.values(metadata.sources || {})}
                         dataPacks={platformStatistics?.world?.dataPacks || []}
                     />
-                ) : view === 'Misc' ? (
+                ) : view === t('viewer.metadataTabs.misc') ? (
                     <ExtraPlatformMetadata data={parsedExtraMetadata!} />
                 ) : (
                     <p>Unknown view.</p>

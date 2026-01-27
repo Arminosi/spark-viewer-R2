@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction, useContext } from 'react';
 import { SamplerMetadata_SamplerMode } from '../../../../proto/spark_pb';
+import { useLanguage } from '../../../../../i18n';
 import { MetadataContext } from '../../SamplerContext';
 import Button from './Button';
 
@@ -12,6 +13,7 @@ export default function SelfTimeModeButton({
     selfTimeMode,
     setSelfTimeMode,
 }: SelfTimeModeButtonProps) {
+    const { t } = useLanguage();
     const metadata = useContext(MetadataContext)!;
 
     if (metadata.samplerMode === SamplerMetadata_SamplerMode.ALLOCATION) {
@@ -19,18 +21,15 @@ export default function SelfTimeModeButton({
             <Button
                 value={selfTimeMode}
                 setValue={setSelfTimeMode}
-                title="Sort Mode"
-                labelTrue="Self bytes allocated"
-                labelFalse="Total bytes allocated"
+                title={t('viewer.sampler.buttons.sortMode')}
+                labelTrue={t('viewer.sampler.buttons.selfBytesAllocated')}
+                labelFalse={t('viewer.sampler.buttons.totalBytesAllocated')}
             >
                 <p>
-                    Methods are sorted according to the number of bytes of
-                    memory allocated directly within the method
+                    {t('viewer.sampler.buttons.selfBytesDescription')}
                 </p>
                 <p>
-                    Methods are sorted according to the number of bytes of
-                    memory allocated directly within the method as well as
-                    allocations in sub-calls
+                    {t('viewer.sampler.buttons.totalBytesDescription')}
                 </p>
             </Button>
         );
@@ -39,18 +38,15 @@ export default function SelfTimeModeButton({
             <Button
                 value={selfTimeMode}
                 setValue={setSelfTimeMode}
-                title="Sort Mode"
-                labelTrue="Self Time"
-                labelFalse="Total Time"
+                title={t('viewer.sampler.buttons.sortMode')}
+                labelTrue={t('viewer.sampler.sortMode.selfTime')}
+                labelFalse={t('viewer.sampler.sortMode.totalTime')}
             >
                 <p>
-                    Methods are sorted according to their &#39;self time&#39;
-                    (the time spent executing code within the method)
+                    {t('viewer.sampler.sortMode.selfTimeDescription')}
                 </p>
                 <p>
-                    Methods are sorted according to their &#39;total time&#39;
-                    (the time spent executing code within the method and the
-                    time spent executing sub-calls)
+                    {t('viewer.sampler.sortMode.totalTimeDescription')}
                 </p>
             </Button>
         );

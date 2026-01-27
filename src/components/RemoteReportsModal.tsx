@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import useRemoteReports from '../hooks/useRemoteReports';
+import { useLanguage } from '../i18n';
 import styles from '../style/remote-reports-modal.module.scss';
 
 interface RemoteReportsModalProps {
@@ -11,6 +12,7 @@ interface RemoteReportsModalProps {
 export default function RemoteReportsModal({ isOpen, onClose }: RemoteReportsModalProps) {
     const router = useRouter();
     const { reports, isLoading, isError } = useRemoteReports();
+    const { t, language } = useLanguage();
     const [selectedReport, setSelectedReport] = useState<string>('');
     const [startDate, setStartDate] = useState<string>('');
     const [endDate, setEndDate] = useState<string>('');
@@ -71,7 +73,7 @@ export default function RemoteReportsModal({ isOpen, onClose }: RemoteReportsMod
         <div className={styles.overlay} onClick={handleOverlayClick}>
             <div className={styles.modal}>
                 <div className={styles.header}>
-                    <h2>远程报告库</h2>
+                    <h2>{t('modal.title')}</h2>
                     <button className={styles.closeButton} onClick={onClose}>
                         ✕
                     </button>
@@ -79,7 +81,7 @@ export default function RemoteReportsModal({ isOpen, onClose }: RemoteReportsMod
                 
                 <div className={styles.filters}>
                     <div className={styles.filterGroup}>
-                        <label>开始日期:</label>
+                        <label>{t('modal.startDate')}:</label>
                         <input
                             type="date"
                             value={startDate}
@@ -88,7 +90,7 @@ export default function RemoteReportsModal({ isOpen, onClose }: RemoteReportsMod
                         />
                     </div>
                     <div className={styles.filterGroup}>
-                        <label>结束日期:</label>
+                        <label>{t('modal.endDate')}:</label>
                         <input
                             type="date"
                             value={endDate}
@@ -96,12 +98,12 @@ export default function RemoteReportsModal({ isOpen, onClose }: RemoteReportsMod
                             className={styles.dateInput}
                         />
                     </div>
-                    <button 
-                        className={styles.clearButton} 
+                    <button
+                        className={styles.clearButton}
                         onClick={clearFilters}
                         disabled={!startDate && !endDate}
                     >
-                        清除筛选
+                        {t('modal.clearFilters')}
                     </button>
                 </div>
                 
@@ -109,48 +111,48 @@ export default function RemoteReportsModal({ isOpen, onClose }: RemoteReportsMod
                     {isLoading && (
                         <div className={styles.loading}>
                             <div className={styles.loadingSpinner}></div>
-                            <p>正在加载远程报告...</p>
+                            <p>{t('modal.loading')}</p>
                         </div>
                     )}
                     
                     {isError && (
                         <div className={styles.error}>
-                            <p>无法连接到远程报告服务器</p>
+                            <p>{t('modal.connectionError')}</p>
                         </div>
                     )}
-                    
+
                     {!isLoading && !isError && filteredReports.length === 0 && reports.length > 0 && (
                         <div className={styles.empty}>
-                            <p>没有符合筛选条件的报告</p>
+                            <p>{t('modal.noMatchingReports')}</p>
                         </div>
                     )}
-                    
+
                     {!isLoading && !isError && reports.length === 0 && (
                         <div className={styles.empty}>
-                            <p>暂无可用的远程报告</p>
+                            <p>{t('modal.noReports')}</p>
                         </div>
                     )}
                     
                     {!isLoading && !isError && filteredReports.length > 0 && (
                         <div className={styles.reportsList}>
                             <div className={styles.listHeader}>
-                                <span>生成时间</span>
-                                <span>文件大小</span>
-                                <span>操作</span>
+                                <span>{t('modal.generatedTime')}</span>
+                                <span>{t('modal.fileSize')}</span>
+                                <span>{t('modal.actions')}</span>
                             </div>
                             {filteredReports.map(report => (
                                 <div key={report.key} className={styles.reportItem}>
                                     <span className={styles.timestamp}>
-                                        {new Date(report.uploaded).toLocaleString('zh-CN')}
+                                        {new Date(report.uploaded).toLocaleString(language === 'zh-CN' ? 'zh-CN' : 'en-US')}
                                     </span>
                                     <span className={styles.size}>
                                         {report.sizeMB}
                                     </span>
-                                    <button 
+                                    <button
                                         className={styles.loadButton}
                                         onClick={() => handleReportSelect(report.downloadPath)}
                                     >
-                                        加载
+                                        {t('modal.load')}
                                     </button>
                                 </div>
                             ))}
@@ -159,7 +161,7 @@ export default function RemoteReportsModal({ isOpen, onClose }: RemoteReportsMod
                     
                     {!isLoading && !isError && filteredReports.length > 0 && (
                         <div className={styles.summary}>
-                            显示 {filteredReports.length} / {reports.length} 个报告
+                            {t('modal.showing')} {filteredReports.length} {t('modal.of')} {reports.length} {t('modal.reports')}
                         </div>
                     )}
                 </div>

@@ -4,6 +4,7 @@ import {
     SamplerMetadata_SamplerEngine,
     SystemStatistics as SystemStatisticsProto,
 } from '../../../proto/spark_pb';
+import { useLanguage } from '../../../../i18n';
 import { formatDuration } from '../../util/format';
 
 export interface PlatformStatisticsProps {
@@ -29,31 +30,31 @@ export default function PlatformStatistics({
     numberOfIncludedTicks,
     engine,
 }: PlatformStatisticsProps) {
+    const { t } = useLanguage();
     return (
         <>
             <p>
-                The {platformType === 'application' ? 'system' : 'platform'} is
-                a <span>{platform.brand || platform.name}</span> {platformType}{' '}
-                running {platformType === 'application' ? 'spark' : ''} version
+                {t(`platformStats.${platformType === 'application' ? 'systemIs' : 'platformIs'}`)}{' '}
+                <span>{platform.brand || platform.name}</span> {platformType}{' '}
+                {t('platformStats.running')} {platformType === 'application' ? t('platformStats.sparkVersion') : ''} {t('platformStats.version')}
                 &quot;
                 <span>{platform.version}</span>&quot;.
             </p>
             {platform.minecraftVersion && (
                 <p>
-                    The detected Minecraft version is &quot;
+                    {t('platformStats.minecraftVersion')} &quot;
                     <span>{platform.minecraftVersion}</span>&quot;.
                 </p>
             )}
             {onlineMode && (
                 <p>
-                    The {platformType} is running in <span>{onlineMode}</span>.
+                    {platformType} {t('platformStats.isRunningIn')} <span>{onlineMode}</span>.
                 </p>
             )}
             {platformStatistics?.playerCount > 0 && (
                 <p>
-                    The {platformType} had a player count of{' '}
-                    <span>{platformStatistics.playerCount}</span> when the
-                    profile completed.
+                    {platformType} {t('platformStats.playerCount')}{' '}
+                    <span>{platformStatistics.playerCount}</span> {t('platformStats.playersOnline')}.
                 </p>
             )}
             {!!systemStatistics && (
@@ -61,10 +62,10 @@ export default function PlatformStatistics({
             )}
             {runningTime && (
                 <p>
-                    The profiler{' '}
+                    {t('platformStats.profilerWasRunning')}{' '}
                     {engine ? (
                         <>
-                            (engine{' '}
+                            ({t('platformStats.engine')}{' '}
                             <span>
                                 {engine == SamplerMetadata_SamplerEngine.ASYNC
                                     ? 'async'
@@ -75,19 +76,18 @@ export default function PlatformStatistics({
                     ) : (
                         ''
                     )}
-                    was running for <span>{formatDuration(runningTime)}</span>
+                    {t('platformStats.wasRunningFor')} <span>{formatDuration(runningTime)}</span>
                     {!!numberOfTicks && (
                         <>
                             {' '}
-                            (<span>{numberOfTicks}</span> ticks)
+                            (<span>{numberOfTicks}</span> {t('platformStats.ticks')})
                         </>
                     )}
                     .
                     {!!numberOfIncludedTicks && (
                         <>
                             {' '}
-                            <span>{numberOfIncludedTicks}</span> ticks exceeded
-                            the &#39;only ticks over&#39; threshold.
+                            <span>{numberOfIncludedTicks}</span> {t('platformStats.ticksExceeded')}.
                         </>
                     )}
                 </p>
@@ -101,35 +101,35 @@ interface SystemStatisticsProps {
 }
 
 const SystemStatistics = ({ systemStatistics }: SystemStatisticsProps) => {
+    const { t } = useLanguage();
     return (
         <>
             <p>
-                The system is running <span>{systemStatistics.os!.name}</span> (
-                <span>{systemStatistics.os!.arch}</span>) version &quot;
-                <span>{systemStatistics.os!.version}</span>&quot; and has{' '}
-                <span>{systemStatistics.cpu!.threads}</span> CPU threads
-                available.
+                {t('platformStats.systemIsRunning')} <span>{systemStatistics.os!.name}</span> (
+                <span>{systemStatistics.os!.arch}</span>) {t('platformStats.version2')} &quot;
+                <span>{systemStatistics.os!.version}</span>&quot; {t('platformStats.andHas')}{' '}
+                <span>{systemStatistics.cpu!.threads}</span> {t('platformStats.cpuThreadsAvailable')}.
             </p>
             {systemStatistics.cpu!.modelName && (
                 <p>
-                    The CPU is described as an{' '}
+                    {t('platformStats.cpuDescribed')}{' '}
                     <span>{systemStatistics.cpu!.modelName}</span>.
                 </p>
             )}
             <p>
-                The process is using Java{' '}
+                {t('platformStats.processUsing')}{' '}
                 <span>{systemStatistics.java!.version}</span> (
-                <span>{systemStatistics.java!.vendorVersion}</span> from{' '}
+                <span>{systemStatistics.java!.vendorVersion}</span> {t('platformStats.from')}{' '}
                 <span>{systemStatistics.java!.vendor}</span>).
                 {systemStatistics.jvm?.name && (
                     <>
                         {' '}
-                        The JVM is a <span>{systemStatistics.jvm?.name}</span>.
+                        {t('platformStats.jvmIs')} <span>{systemStatistics.jvm?.name}</span>.
                     </>
                 )}
             </p>
             <p>
-                The current process uptime is{' '}
+                {t('platformStats.currentProcessUptime')}{' '}
                 <span>{formatDuration(systemStatistics.uptime)}</span>.
             </p>
         </>

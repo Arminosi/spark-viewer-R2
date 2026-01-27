@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
+import { useLanguage } from '../../../../../i18n';
 import Button from './Button';
 
 export interface BottomUpButtonProps {
@@ -10,21 +11,20 @@ export default function BottomUpButton({
     bottomUp,
     setBottomUp,
 }: BottomUpButtonProps) {
+    const { t } = useLanguage();
     return (
         <Button
             value={bottomUp}
             setValue={setBottomUp}
-            title="Display"
-            labelTrue="Bottom Up"
-            labelFalse="Top Down"
+            title={t('viewer.sampler.buttons.display')}
+            labelTrue={t('viewer.sampler.displayMode.bottomUp')}
+            labelFalse={t('viewer.sampler.displayMode.topDown')}
         >
             <p>
-                The call tree is reversed - expanding a node reveals the method
-                that called it.
+                {t('viewer.sampler.displayMode.bottomUpDescription')}
             </p>
             <p>
-                The call tree is &#39;normal&#39; - expanding a node reveals the
-                sub-methods that it calls.
+                {t('viewer.sampler.displayMode.topDownDescription')}
             </p>
         </Button>
     );
