@@ -58,8 +58,8 @@ export const zh = {
   viewer: {
     widgetLabels: {
       'min': '最小',
-      'med': '平均',
-      '95%ile': '95%最大',
+      'med': '中位',
+      '95%ile': '95%分位',
       'max': '最大',
       '1m': '1 分钟',
       '5m': '5 分钟',
@@ -77,8 +77,8 @@ export const zh = {
       total: '总计',
       'avg time': '平均耗时',
       'avg freq': '平均频率',
-      'G1 Young': 'G1 Young',
-      'G1 Old': 'G1 Old',
+      'G1 Young': 'G1 年轻代',
+      'G1 Old': 'G1 老年代',
     },
     widgets: {
       Disk: '磁盘',
