@@ -3,15 +3,16 @@ import { useState, useContext } from 'react';
 import SparkLayout from '../components/SparkLayout';
 import { NextPageWithLayout, SelectedFileContext } from './_app';
 import RemoteReportsModal from '../components/RemoteReportsModal';
+import { useLanguage } from '../i18n';
 import styles from '../style/homepage.module.scss';
 
 const Index: NextPageWithLayout = () => {
+    const { t } = useLanguage();
     const { setSelectedFile } = useContext(SelectedFileContext);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     function onFileSelected(file: File) {
         setSelectedFile(file);
-        // viewer route is handled elsewhere; keep simple here
     }
 
     return (
@@ -21,7 +22,7 @@ const Index: NextPageWithLayout = () => {
                     className={styles['remote-open-button']}
                     onClick={() => setIsModalOpen(true)}
                 >
-                    打开远程报告
+                    {t('homepage.openRemoteReports')}
                 </button>
             </div>
 
@@ -37,26 +38,26 @@ const ViewerSection = ({
 }: {
     onFileSelected: (file: File) => void;
 }) => {
+    const { t } = useLanguage();
+
     return (
-        <section>
-            <h2>Viewer</h2>
-            <p>This website is also an online viewer for spark data.</p>
-            <p>In order to use it:</p>
-            <ol>
-                <li>
-                    Generate a profile or heap summary using the appropriate
-                    spark commands, then load the resulting file here.
-                </li>
-                <li>
-                    After the data has been uploaded, open the viewer from the
-                    viewer UI.
-                </li>
-            </ol>
-            <p>
-                You can also generate or export a <code>.sparkprofile</code> or{' '}
-                <code>.sparkheap</code> file and open it by dragging it into the
-                box below.
+        <section className={styles['viewer-section']}>
+            <h2>{t('homepage.viewerTitle')}</h2>
+            <p className={styles.description}>{t('homepage.viewerDescription')}</p>
+
+            <div className={styles['how-to-use']}>
+                <h3>{t('homepage.howToUseTitle')}</h3>
+                <ol>
+                    <li>{t('homepage.step1')}</li>
+                    <li>{t('homepage.step2')}</li>
+                </ol>
+            </div>
+
+            <p className={styles['alternative-text']}>
+                {t('homepage.alternativeMethod')} <code>.sparkprofile</code> {t('homepage.or')}{' '}
+                <code>.sparkheap</code> {t('homepage.file')}
             </p>
+
             <FilePicker callback={onFileSelected} />
         </section>
     );

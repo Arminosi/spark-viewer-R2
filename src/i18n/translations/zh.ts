@@ -44,6 +44,17 @@ export const zh = {
     and: '和',
     built: '构建',
   },
+  homepage: {
+    openRemoteReports: '打开远程报告',
+    viewerTitle: 'Spark 性能分析查看器',
+    viewerDescription: '本网站是 Spark 性能分析数据的在线查看器。',
+    howToUseTitle: '使用方法：',
+    step1: '使用相应的 spark 命令生成性能分析或堆摘要，然后在此处加载生成的文件。',
+    step2: '数据上传后，从查看器界面打开查看器。',
+    alternativeMethod: '您也可以生成或导出',
+    or: '或',
+    file: '文件，并将其拖放到下面的框中打开。',
+  },
   viewer: {
     allView: {
       title: '全部视图',

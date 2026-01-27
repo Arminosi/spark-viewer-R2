@@ -2,8 +2,8 @@
     display: flex;
     justify-content: space-evenly;
     flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 10px;
+    gap: 6px;
+    margin-bottom: 8px;
 
     &[data-hide='true'] :nth-child(n + 6) {
         display: none;
@@ -31,25 +31,25 @@
         .widget {
             color: #b5b5b5;
             background: #252b2d;
-            padding: 2px 5px;
+            padding: 2px 4px;
             border-radius: 5px;
-            width: 260px;
-            max-width: 340px;
+            width: 200px;
+            max-width: 280px;
             flex-grow: 1;
 
             h1 {
                 margin: 0;
-                padding-top: 5px;
-                padding-bottom: 8px;
-                font-size: 13pt;
+                padding-top: 3px;
+                padding-bottom: 5px;
+                font-size: 11pt;
                 font-weight: normal;
                 color: #fff;
                 text-align: center;
 
                 span {
                     vertical-align: middle;
-                    padding-left: 6px;
-                    font-size: 11pt;
+                    padding-left: 5px;
+                    font-size: 9pt;
                     color: #b5b5b5;
                 }
             }
@@ -65,10 +65,11 @@
                 text-align: center;
 
                 div:nth-child(1) {
-                    font-size: 16pt;
+                    font-size: 13pt;
                 }
 
                 div:nth-child(2) {
+                    font-size: 9pt;
                     color: #b5b5b5;
                 }
             }
@@ -76,10 +77,12 @@
             .widget-single-value {
                 display: flex;
                 justify-content: center;
+                font-size: 13pt;
 
                 span:nth-child(2) {
                     color: #b5b5b5;
-                    padding: 0 5px;
+                    padding: 0 4px;
+                    font-size: 11pt;
                 }
 
                 span:nth-child(1) {

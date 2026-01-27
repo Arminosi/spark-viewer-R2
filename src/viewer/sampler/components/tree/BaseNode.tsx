@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useContextMenu } from 'react-contexify';
 import SourceThreadVirtualNode from '../../node/SourceThreadVirtualNode';
 import VirtualNode from '../../node/VirtualNode';
@@ -52,6 +52,13 @@ const BaseNode = React.memo(({ parents, node, forcedTime }: BaseNodeProps) => {
         const count = nodes.filter(n => searchQuery.matches(n)).length;
         return count <= 1;
     });
+
+    // Auto-expand when this node or its children are highlighted
+    useEffect(() => {
+        if (highlighted.check(node)) {
+            setExpanded(true);
+        }
+    }, [highlighted, node]);
 
     const parentsForChildren = useMemo(
         () => parents.concat([node]),

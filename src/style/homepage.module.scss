@@ -1,9 +1,73 @@
 .homepage {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+
     section {
         background-color: #252b2d;
-        border-radius: 5px;
+        border-radius: 8px;
         margin: 25px 0;
-        padding: 0.1px 15px;
+        padding: 30px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .viewer-section {
+        h2 {
+            color: #ffc93a;
+            font-size: 1.8rem;
+            margin: 0 0 15px 0;
+            font-weight: 600;
+        }
+
+        .description {
+            color: #e0e2e4;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .how-to-use {
+            background-color: #1e2327;
+            border-left: 4px solid #ffc93a;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 4px;
+
+            h3 {
+                color: #ffc93a;
+                font-size: 1.2rem;
+                margin: 0 0 15px 0;
+                font-weight: 600;
+            }
+
+            ol {
+                margin: 0;
+                padding-left: 25px;
+                color: #ccc;
+
+                li {
+                    margin: 10px 0;
+                    line-height: 1.6;
+                    font-size: 0.95rem;
+                }
+            }
+        }
+
+        .alternative-text {
+            color: #b0b0b0;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 20px 0;
+
+            code {
+                background-color: #1e2327;
+                color: #ffc93a;
+                padding: 2px 6px;
+                border-radius: 3px;
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 0.9em;
+            }
+        }
     }
 
     :global {

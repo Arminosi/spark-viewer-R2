@@ -50,6 +50,10 @@ export const zhViewerDetails = {
       title: '信息点：',
       description: '选择是否显示信息点。',
     },
+    topFunctions: {
+      button: '最耗时函数',
+      title: '按时间排序的最耗时函数',
+    },
   },
   metadataTabs: {
     platform: '平台',
