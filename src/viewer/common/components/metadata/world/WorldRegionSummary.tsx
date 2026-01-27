@@ -8,6 +8,7 @@ import {
     WorldStatistics_Region,
     WorldStatistics_World,
 } from '../../../../proto/spark_pb';
+import { useLanguage } from '../../../../../i18n';
 import ChunkCountsList from './ChunkCountsList';
 import EntityCountsList from './EntityCountsList';
 
@@ -22,6 +23,7 @@ export interface WorldRegionSummaryProps {
 export default function WorldRegionSummary({
     worlds,
 }: WorldRegionSummaryProps) {
+    const { t } = useLanguage();
     const regions = useMemo(() => {
         const regions: Region[] = [];
         for (const world of worlds) {
@@ -63,20 +65,20 @@ export default function WorldRegionSummary({
     return (
         <div className="region-view">
             <div className="header region-selector">
-                <div className="button" onClick={previous} title="Previous">
+                <div className="button" onClick={previous} title={t('viewer.world.previous')}>
                     <FontAwesomeIcon icon={faBackwardStep} />
                 </div>
                 <span>
-                    Region #{regionIdx + 1} (of {regions.length})
+                    {t('viewer.world.region')} #{regionIdx + 1} ({t('viewer.world.of')} {regions.length})
                 </span>
-                <div className="button" onClick={next} title="Next">
+                <div className="button" onClick={next} title={t('viewer.world.next')}>
                     <FontAwesomeIcon icon={faForwardStep} />
                 </div>
             </div>
             <div className="detail-lists">
                 <div>
                     <p>
-                        <b>Entities</b> (<span>{region.totalEntities}</span>):
+                        <b>{t('viewer.world.entities')}</b> (<span>{region.totalEntities}</span>):
                     </p>
                     <EntityCountsList entityCounts={combinedEntities} />
                 </div>
@@ -86,7 +88,7 @@ export default function WorldRegionSummary({
                     </p>
                     <br />
                     <p>
-                        <b>Chunks</b> (<span>{region.chunks.length}</span>):
+                        <b>{t('viewer.world.chunks')}</b> (<span>{region.chunks.length}</span>):
                     </p>
                     <ChunkCountsList chunks={region.chunks} />
                 </div>

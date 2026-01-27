@@ -1,3 +1,6 @@
+import { zhViewerDetails } from './zh-viewer-details';
+import { zhPlatformInfo } from './zh-platform-info';
+
 export const zh = {
   common: {
     loading: '加载中...',
@@ -75,5 +78,7 @@ export const zh = {
     graph: {
       refine: '优化',
     },
+    ...zhViewerDetails,
   },
+  ...zhPlatformInfo,
 };

@@ -1,4 +1,5 @@
 import { WorldStatistics_World } from '../../../../proto/spark_pb';
+import { useLanguage } from '../../../../../i18n';
 
 export interface WorldTotalEntitiesProps {
     totalEntities: number;
@@ -9,10 +10,11 @@ export default function WorldTotalEntities({
     totalEntities,
     worlds,
 }: WorldTotalEntitiesProps) {
+    const { t } = useLanguage();
     return (
         <>
             <p>
-                <b>Entities</b> (total): <span>{totalEntities}</span>
+                <b>{t('viewer.world.entities')}</b> ({t('viewer.world.total')}): <span>{totalEntities}</span>
             </p>
             <ul>
                 {worlds

@@ -1,4 +1,5 @@
 import { WorldStatistics_World } from '../../../../proto/spark_pb';
+import { useLanguage } from '../../../../../i18n';
 
 interface ExtendedWorld extends WorldStatistics_World {
     totalChunks: number;
@@ -11,6 +12,7 @@ export interface WorldTotalChunksProps {
 export default function WorldTotalChunks({
     worldsInput,
 }: WorldTotalChunksProps) {
+    const { t } = useLanguage();
     const worlds = worldsInput as ExtendedWorld[];
 
     for (const world of worlds) {
@@ -28,7 +30,7 @@ export default function WorldTotalChunks({
     return (
         <>
             <p>
-                <b>Chunks</b> (total): <span>{totalChunks}</span>
+                <b>{t('viewer.world.chunks')}</b> ({t('viewer.world.total')}): <span>{totalChunks}</span>
             </p>
             <ul>
                 {worlds

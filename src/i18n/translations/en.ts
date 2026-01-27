@@ -1,3 +1,6 @@
+import { enViewerDetails } from './en-viewer-details';
+import { enPlatformInfo } from './en-platform-info';
+
 export const en = {
   common: {
     loading: 'Loading...',
@@ -75,5 +78,7 @@ export const en = {
     graph: {
       refine: 'Refine',
     },
+    ...enViewerDetails,
   },
+  ...enPlatformInfo,
 };

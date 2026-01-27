@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction, useContext } from 'react';
 import { SamplerMetadata_SamplerMode } from '../../../../proto/spark_pb';
+import { useLanguage } from '../../../../../i18n';
 import { MetadataContext } from '../../SamplerContext';
 import Button from './Button';
 
@@ -12,6 +13,7 @@ export default function LabelModeButton({
     labelMode,
     setLabelMode,
 }: LabelModeButtonProps) {
+    const { t } = useLanguage();
     const metadata = useContext(MetadataContext)!;
     if (!metadata.numberOfTicks) {
         return null;
@@ -22,19 +24,15 @@ export default function LabelModeButton({
             <Button
                 value={labelMode}
                 setValue={setLabelMode}
-                title="Label"
-                labelTrue="Bytes per second"
-                labelFalse="Percentage"
+                title={t('viewer.sampler.buttons.label')}
+                labelTrue={t('viewer.sampler.buttons.bytesPerSecond')}
+                labelFalse={t('viewer.sampler.labelMode.percentage')}
             >
                 <p>
-                    The value displayed is the number of bytes of memory
-                    allocated per second on average (memory pressure) by each
-                    frame.
+                    {t('viewer.sampler.buttons.bytesPerSecondDescription')}
                 </p>
                 <p>
-                    The value displayed is number of bytes of memory allocated
-                    by each frame divided by the total allocated as a
-                    percentage.
+                    {t('viewer.sampler.buttons.percentageAllocationDescription')}
                 </p>
             </Button>
         );
@@ -43,17 +41,15 @@ export default function LabelModeButton({
             <Button
                 value={labelMode}
                 setValue={setLabelMode}
-                title="Label"
-                labelTrue="Time per tick"
-                labelFalse="Percentage"
+                title={t('viewer.sampler.buttons.label')}
+                labelTrue={t('viewer.sampler.buttons.timePerTick')}
+                labelFalse={t('viewer.sampler.labelMode.percentage')}
             >
                 <p>
-                    The value displayed against each frame is the average time
-                    in milliseconds spent executing the method each tick.
+                    {t('viewer.sampler.buttons.timePerTickDescription')}
                 </p>
                 <p>
-                    The value displayed against each frame is the time divided
-                    by the total time as a percentage.
+                    {t('viewer.sampler.labelMode.percentageDescription')}
                 </p>
             </Button>
         );
