@@ -15,6 +15,7 @@ import {
     fetchFromBytebin,
     fetchFromFile,
     FetchResult,
+    fetchFromRemote,
 } from './common/logic/fetch';
 import { parse } from './common/logic/parse';
 import {
@@ -39,7 +40,14 @@ import SamplerData from './sampler/SamplerData';
 const Heap = dynamic(() => import('./heap/Heap'));
 const Sampler = dynamic(() => import('./sampler/components/Sampler'));
 
-export default function SparkViewer() {
+interface SparkViewerProps {
+    // If provided, viewer will use this FetchResult directly instead of
+    // attempting to fetch by `code` / bytebin. This is used by the /remote
+    // page to render the viewer without changing the URL.
+    initialResult?: FetchResult;
+}
+
+export default function SparkViewer({ initialResult }: SparkViewerProps) {
     const router = useRouter();
 
     const code = useMemo(() => {
@@ -67,9 +75,29 @@ export default function SparkViewer() {
         [setExportCallback, setData]
     );
 
-    // On page load, if status is set to LOADING_DATA, make
-    // a request to bytebin to load the payload
     useEffect(() => {
+        // If an `initialResult` was provided, use it and skip the normal
+        // fetching logic. This allows `/remote` to render the viewer without
+        // changing the URL.
+        if (initialResult) {
+            try {
+                if (initialResult.exportCallback) {
+                    setExportCallback(() => initialResult.exportCallback);
+                }
+                const [parsedData, parsedStatus] = parse(
+                    initialResult.type,
+                    initialResult.buf
+                );
+                setData(parsedData);
+                setMetadata(parsedData.metadata);
+                setStatus(parsedStatus);
+            } catch (e) {
+                console.error('Failed to parse initial result for viewer', e);
+                setStatus(FAILED_DATA);
+            }
+            return;
+        }
+
         if (!code || status !== LOADING_DATA) {
             return;
         }
@@ -77,26 +105,44 @@ export default function SparkViewer() {
         (async () => {
             try {
                 let result: FetchResult;
-                
+
                 // Check if this is a remote load from sessionStorage
                 const isRemote = router.query.remote === 'true';
                 const remoteDataKey = `remote_${code}`;
-                
+
                 if (isRemote && typeof window !== 'undefined') {
-                    const sessionData = sessionStorage.getItem(remoteDataKey);
+                    // Check sessionStorage first (same-tab). If missing, check
+                    // localStorage for the IDB marker (so refresh/new-tab works).
+                    let sessionData = sessionStorage.getItem(remoteDataKey);
+                    if (!sessionData) {
+                        sessionData = localStorage.getItem(remoteDataKey) ?? null;
+                    }
+
                     if (sessionData) {
                         try {
                             const parsed = JSON.parse(sessionData);
 
-                            // If the remote payload was stored in IndexedDB, retrieve it
                             if (parsed.indexed) {
                                 const { idbGet, idbDelete } = await import('./common/util/idb');
-                                const bufAB = await idbGet(remoteDataKey);
-                                if (!bufAB) throw new Error('Remote payload not found in IndexedDB');
+                                let bufAB = await idbGet(remoteDataKey);
 
-                                // Clean up both IDB and session storage
+                                // If IDB missing, but marker contains the original
+                                // download path, attempt to re-download as a fallback.
+                                if (!bufAB && parsed.downloadPath) {
+                                    try {
+                                        const redownload = await fetchFromRemote(parsed.downloadPath);
+                                        bufAB = redownload.buf as ArrayBuffer;
+                                    } catch (redErr) {
+                                        console.error('Failed to re-download remote payload:', redErr);
+                                    }
+                                }
+
+                                if (!bufAB) throw new Error('Remote payload not found in IndexedDB or by re-download');
+
+                                // Clean up IDB and storage markers
                                 await idbDelete(remoteDataKey).catch(() => {});
                                 sessionStorage.removeItem(remoteDataKey);
+                                localStorage.removeItem(remoteDataKey);
 
                                 result = {
                                     type: parsed.type,
@@ -104,13 +150,27 @@ export default function SparkViewer() {
                                     exportCallback: createExportCallback(code, bufAB, parsed.type),
                                 };
                             } else {
-                                const { data: arrayData, type, metadata } = parsed;
+                                const { data: arrayData, type, metadata, downloadPath } = parsed;
                                 const buf = new Uint8Array(arrayData).buffer;
 
-                                // Clean up session storage
+                                // Persist a copy into IndexedDB and write a marker to
+                                // localStorage so refresh/new-tab can load later.
+                                try {
+                                    const { idbPut } = await import('./common/util/idb');
+                                    await idbPut(remoteDataKey, buf);
+                                    const marker = { indexed: true, type, metadata, downloadPath };
+                                    try {
+                                        localStorage.setItem(remoteDataKey, JSON.stringify(marker));
+                                    } catch (lsErr) {
+                                        console.warn('Failed to write localStorage marker', lsErr);
+                                    }
+                                } catch (idbErr) {
+                                    console.warn('Failed to persist remote payload to IndexedDB:', idbErr);
+                                }
+
+                                // Clean up only sessionStorage (we keep localStorage marker)
                                 sessionStorage.removeItem(remoteDataKey);
 
-                                // Create result object
                                 result = {
                                     type,
                                     buf,
@@ -143,7 +203,7 @@ export default function SparkViewer() {
                 setStatus(FAILED_DATA);
             }
         })();
-    }, [status, setStatus, code, selectedFile, router]);
+    }, [initialResult, status, setStatus, code, selectedFile, router]);
 
     switch (status) {
         case LOADING_DATA:
