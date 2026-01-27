@@ -86,18 +86,37 @@ export default function SparkViewer() {
                     const sessionData = sessionStorage.getItem(remoteDataKey);
                     if (sessionData) {
                         try {
-                            const { data: arrayData, type, metadata } = JSON.parse(sessionData);
-                            const buf = new Uint8Array(arrayData).buffer;
-                            
-                            // Clean up session storage
-                            sessionStorage.removeItem(remoteDataKey);
-                            
-                            // Create result object
-                            result = {
-                                type,
-                                buf,
-                                exportCallback: createExportCallback(code, buf, type),
-                            };
+                            const parsed = JSON.parse(sessionData);
+
+                            // If the remote payload was stored in IndexedDB, retrieve it
+                            if (parsed.indexed) {
+                                const { idbGet, idbDelete } = await import('./common/util/idb');
+                                const bufAB = await idbGet(remoteDataKey);
+                                if (!bufAB) throw new Error('Remote payload not found in IndexedDB');
+
+                                // Clean up both IDB and session storage
+                                await idbDelete(remoteDataKey).catch(() => {});
+                                sessionStorage.removeItem(remoteDataKey);
+
+                                result = {
+                                    type: parsed.type,
+                                    buf: bufAB,
+                                    exportCallback: createExportCallback(code, bufAB, parsed.type),
+                                };
+                            } else {
+                                const { data: arrayData, type, metadata } = parsed;
+                                const buf = new Uint8Array(arrayData).buffer;
+
+                                // Clean up session storage
+                                sessionStorage.removeItem(remoteDataKey);
+
+                                // Create result object
+                                result = {
+                                    type,
+                                    buf,
+                                    exportCallback: createExportCallback(code, buf, type),
+                                };
+                            }
                         } catch (parseError) {
                             console.error('Failed to parse remote session data:', parseError);
                             throw new Error('Invalid remote session data');
