@@ -69,6 +69,7 @@ const MemoryUsageBar = ({
     committed,
     max,
 }: PlatformStatistics_Memory_MemoryUsage) => {
+    const { t } = useLanguage();
     let percent;
     if (max && max > 0) {
         percent = used / max;

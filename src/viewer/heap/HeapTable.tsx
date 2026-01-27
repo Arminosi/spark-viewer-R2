@@ -51,8 +51,7 @@ export default function HeapTable({ data, searchQuery }: HeapTableProps) {
                         dataKey="size"
                         width={100}
                         cellRenderer={({ cellData }) => {
-                                const { t } = useLanguage();
-                                return formatBytesLocalized(cellData, t);
+                            return formatBytesLocalized(cellData, t);
                         }}
                     />
                     <Column

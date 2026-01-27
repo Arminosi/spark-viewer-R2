@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import styles from '../../../style/metadata.module.scss';
 import { SparkMetadata } from '../../proto/guards';
-import { MetadataToggle } from '../../hooks/useMetadataToggle';
+import { MetadataToggle } from '../../common/hooks/useMetadataToggle';
 import MetadataDetail from './metadata/MetadataDetail';
 import Widgets from './widgets/Widgets';
 
