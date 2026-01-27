@@ -53,6 +53,8 @@ export const zhViewerDetails = {
     topFunctions: {
       button: '最耗时函数',
       title: '按时间排序的最耗时函数',
+      more: '更多关联模组/插件',
+      collapse: '收起',
     },
   },
   metadataTabs: {

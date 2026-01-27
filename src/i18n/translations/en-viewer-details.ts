@@ -53,6 +53,8 @@ export const enViewerDetails = {
     topFunctions: {
       button: 'Top Functions',
       title: 'Top Functions by Time',
+      more: 'More from nearby',
+      collapse: 'Collapse',
     },
   },
   metadataTabs: {
