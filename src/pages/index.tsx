@@ -1,5 +1,6 @@
 import FilePicker from '../components/FilePicker';
 import { useState, useContext } from 'react';
+import { useRouter } from 'next/router';
 import SparkLayout from '../components/SparkLayout';
 import { NextPageWithLayout, SelectedFileContext } from './_app';
 import RemoteReportsModal from '../components/RemoteReportsModal';
@@ -9,10 +10,13 @@ import styles from '../style/homepage.module.scss';
 const Index: NextPageWithLayout = () => {
     const { t } = useLanguage();
     const { setSelectedFile } = useContext(SelectedFileContext);
+    const router = useRouter();
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     function onFileSelected(file: File) {
         setSelectedFile(file);
+        // Navigate to the viewer route which uses code '_' to load from selectedFile
+        router.push('/_');
     }
 
     return (

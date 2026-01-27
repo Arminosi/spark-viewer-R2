@@ -81,6 +81,8 @@ export default function NodeInfo({
         }
     }
 
+    const moduleMeta = source ? (metadata as any).sources?.[source] : undefined;
+
     return (
         <>
             <span className="name">
@@ -103,6 +105,11 @@ export default function NodeInfo({
                     {!!source && <> ({source})</>}
                 </span>
             </span>
+
+            {moduleMeta && (
+                <span className="moduleLabel">{moduleMeta.name}</span>
+            )}
+
             <div className="bar">
                 <span
                     className="inner"
