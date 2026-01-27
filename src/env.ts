@@ -42,6 +42,7 @@ export const env = createEnv({
             stringOrUndefined,
             z.string().url().default('https://sparkapi.lucko.me')
         ),
+        // 这里修改为你的R2地址
         NEXT_PUBLIC_SPARK_MONITOR_URL: z.preprocess(
             stringOrUndefined,
             z.string().url().default('https://as-spark-monitor.arminosi.workers.dev')

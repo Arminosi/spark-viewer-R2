@@ -15,7 +15,8 @@ import {
     SamplerMetadata_SamplerMode,
 } from '../../proto/spark_pb';
 import { SparkContentType } from '../logic/contentType';
-import { formatDuration } from '../util/format';
+import { formatDuration, formatDurationLocalized } from '../util/format';
+import { useLanguage } from '../../../i18n';
 import { unwrapDateMetadata, unwrapSamplerMetadata } from '../util/metadata';
 import Avatar from './Avatar';
 import Widgets from './widgets/Widgets';
@@ -62,6 +63,8 @@ export default function Thumbnail({ metadata, code, type }: ThumbnailProps) {
     const { runningTime, numberOfTicks, samplerMode } =
         unwrapSamplerMetadata(metadata);
 
+    const { t } = useLanguage();
+
     const { time, date } = unwrapDateMetadata(metadata);
 
     return (
@@ -107,7 +110,7 @@ export default function Thumbnail({ metadata, code, type }: ThumbnailProps) {
                 {runningTime && (
                     <p>
                         <FontAwesomeIcon fixedWidth={true} icon={faClock} />{' '}
-                        Duration <span>{formatDuration(runningTime)}</span>
+                        <>Duration <span>{formatDurationLocalized(runningTime, t)}</span></>
                         {!!numberOfTicks && (
                             <>
                                 {' '}

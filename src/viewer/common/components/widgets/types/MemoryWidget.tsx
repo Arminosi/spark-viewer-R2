@@ -2,7 +2,8 @@ import {
     PlatformStatistics_Memory_MemoryUsage,
     SystemStatistics_Memory_MemoryPool,
 } from '../../../../proto/spark_pb';
-import { formatBytes } from '../../../util/format';
+import { formatBytesLocalized } from '../../../util/format';
+import { useLanguage } from '../../../../../i18n';
 import { Formatter, WidgetFormat } from '../format';
 import Widget from '../Widget';
 import WidgetSingleValue from '../WidgetSingleValue';
@@ -15,6 +16,8 @@ export interface MemoryWidgetProps {
 }
 
 export default function MemoryWidget({ memory, label }: MemoryWidgetProps) {
+    const { t } = useLanguage();
+
     const formatter: Formatter = {
         color: (value, total) => {
             const percent = value / total;
@@ -27,7 +30,7 @@ export default function MemoryWidget({ memory, label }: MemoryWidgetProps) {
             }
         },
         format: value => {
-            return formatBytes(value);
+            return formatBytesLocalized(value, t);
         },
     };
 

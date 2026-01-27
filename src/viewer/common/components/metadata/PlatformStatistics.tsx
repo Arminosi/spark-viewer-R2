@@ -5,7 +5,7 @@ import {
     SystemStatistics as SystemStatisticsProto,
 } from '../../../proto/spark_pb';
 import { useLanguage } from '../../../../i18n';
-import { formatDuration } from '../../util/format';
+import { formatDuration, formatDurationLocalized } from '../../util/format';
 
 export interface PlatformStatisticsProps {
     platform: PlatformMetadata;
@@ -76,7 +76,7 @@ export default function PlatformStatistics({
                     ) : (
                         ''
                     )}
-                    {t('platformStats.wasRunningFor')} <span>{formatDuration(runningTime)}</span>
+                    {t('platformStats.wasRunningFor')} <span>{formatDurationLocalized(runningTime, t)}</span>
                     {!!numberOfTicks && (
                         <>
                             {' '}
@@ -130,7 +130,7 @@ const SystemStatistics = ({ systemStatistics }: SystemStatisticsProps) => {
             </p>
             <p>
                 {t('platformStats.currentProcessUptime')}{' '}
-                <span>{formatDuration(systemStatistics.uptime)}</span>.
+                <span>{formatDurationLocalized(systemStatistics.uptime, t)}</span>.
             </p>
         </>
     );

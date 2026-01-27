@@ -242,12 +242,24 @@ export default function TopFunctionsModal({
                                         return null;
                                     })()}
                                     <div className={styles.functionStats}>
-                                        <span className={styles.time}>
-                                            {func.selfTime.toFixed(0)} ms
-                                        </span>
-                                        <span className={styles.percentage}>
-                                            {func.percentage.toFixed(2)}%
-                                        </span>
+                                        {(() => {
+                                            const p = func.percentage;
+                                            // thresholds: <=70 green, >70 && <=90 orange, >90 red
+                                            let severityClass = styles.pctLow;
+                                            if (p > 90) severityClass = styles.pctHigh;
+                                            else if (p > 70) severityClass = styles.pctMed;
+
+                                            return (
+                                                <>
+                                                    <span className={`${styles.time} ${severityClass}`}>
+                                                        {func.selfTime.toFixed(0)} ms
+                                                    </span>
+                                                    <span className={`${styles.percentage} ${severityClass}`}>
+                                                        {func.percentage.toFixed(2)}%
+                                                    </span>
+                                                </>
+                                            );
+                                        })()}
                                     </div>
                                     {/* associated sources: show first by default, allow expand */}
                                     <div className={styles.sourceList} onClick={e => e.stopPropagation()}>

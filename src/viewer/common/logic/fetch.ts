@@ -69,7 +69,10 @@ export function readFileAsync(file: Blob): Promise<ArrayBuffer> {
     });
 }
 
-export async function fetchFromRemote(downloadPath: string): Promise<FetchResult> {
+export async function fetchFromRemote(
+    downloadPath: string,
+    onProgress?: (loaded: number, total?: number) => void
+): Promise<FetchResult> {
     const fullUrl = `${env.NEXT_PUBLIC_SPARK_MONITOR_URL}${downloadPath}`;
     
     const response = await fetch(fullUrl);
@@ -104,11 +107,46 @@ export async function fetchFromRemote(downloadPath: string): Promise<FetchResult
         }
     }
 
-    const buf = await response.arrayBuffer();
-    
+    // Try to stream the response and report progress if possible
+    const contentLengthHeader = response.headers.get('content-length');
+    const total = contentLengthHeader ? parseInt(contentLengthHeader, 10) : undefined;
+
+    let arrayBuffer: ArrayBuffer;
+
+    if (!response.body || typeof response.body.getReader !== 'function') {
+        // Fallback: no streaming support
+        const buf = await response.arrayBuffer();
+        if (onProgress) onProgress(buf.byteLength, total);
+        arrayBuffer = buf;
+    } else {
+        const reader = response.body.getReader();
+        const chunks: Uint8Array[] = [];
+        let receivedLength = 0;
+
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            if (value) {
+                chunks.push(value);
+                receivedLength += value.length;
+                if (onProgress) onProgress(receivedLength, total);
+            }
+        }
+
+        // Concatenate chunks into single ArrayBuffer
+        const result = new Uint8Array(receivedLength);
+        let position = 0;
+        for (const chunk of chunks) {
+            result.set(chunk, position);
+            position += chunk.length;
+        }
+
+        arrayBuffer = result.buffer;
+    }
+
     // Extract filename for export
     const filename = downloadPath.split('/').pop() || 'remote-report';
-    const exportCallback = createExportCallback(filename.replace(/\.[^/.]+$/, ''), buf, type);
-    
-    return { type, buf, exportCallback };
+    const exportCallback = createExportCallback(filename.replace(/\.[^/.]+$/, ''), arrayBuffer, type);
+
+    return { type, buf: arrayBuffer, exportCallback };
 }

@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import styles from '../../../style/metadata.module.scss';
 import { SparkMetadata } from '../../proto/guards';
-import { MetadataToggle } from '../hooks/useMetadataToggle';
+import { MetadataToggle } from '../../hooks/useMetadataToggle';
 import MetadataDetail from './metadata/MetadataDetail';
 import Widgets from './widgets/Widgets';
 
@@ -17,21 +17,26 @@ export default function WidgetsAndMetadata({
     return (
         <div
             className={classNames(styles.metadata, {
-                expanded: metadataToggle.showInfo,
+                expanded: metadataToggle.showMetadata,
             })}
-            style={{
-                display: metadataToggle.showWidgets ? undefined : 'none',
-            }}
+            style={{ display: metadataToggle.showMetadata ? undefined : 'none' }}
         >
-            {!!metadata.platformStatistics && (
-                <Widgets
-                    metadata={metadata}
-                    expanded={metadataToggle.showInfo}
-                />
-            )}
-            {!!metadata.platform && metadataToggle.showInfo && (
-                <MetadataDetail metadata={metadata} />
-            )}
+            <div className={styles['metadata-grid']}>
+                <div className={styles['widgets-column']}>
+                    {!!metadata.platformStatistics && (
+                        <Widgets
+                            metadata={metadata}
+                            expanded={metadataToggle.showMetadata}
+                        />
+                    )}
+                </div>
+
+                <div className={styles['metadata-column']}>
+                    {!!metadata.platform && metadataToggle.showMetadata && (
+                        <MetadataDetail metadata={metadata} />
+                    )}
+                </div>
+            </div>
         </div>
     );
 }

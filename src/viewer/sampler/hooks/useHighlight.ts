@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import VirtualNode from '../node/VirtualNode';
 
 export interface Highlight {
@@ -12,6 +12,7 @@ export interface Highlight {
 
 export default function useHighlight(): Highlight {
     const router = useRouter();
+    const navigatingRef = useRef(false);
     const [highlighted, setHighlighted] = useState(() => {
         const set = new Set<number>();
         const ids = router.query['hl'] as string;
@@ -20,6 +21,27 @@ export default function useHighlight(): Highlight {
         }
         return set;
     });
+
+    useEffect(() => {
+        // Listen to route change events so we don't fight user-initiated navigation
+        const handleStart = () => {
+            navigatingRef.current = true;
+        };
+        const handleEnd = () => {
+            navigatingRef.current = false;
+        };
+
+        router.events.on('routeChangeStart', handleStart);
+        router.events.on('routeChangeComplete', handleEnd);
+        router.events.on('routeChangeError', handleEnd);
+
+        return () => {
+            router.events.off('routeChangeStart', handleStart);
+            router.events.off('routeChangeComplete', handleEnd);
+            router.events.off('routeChangeError', handleEnd);
+        };
+
+    }, [router.events]);
 
     useEffect(() => {
         const ids = Array.from(highlighted).join(',');
@@ -34,8 +56,32 @@ export default function useHighlight(): Highlight {
             path = path.substring(0, questionMark);
         }
 
-        const hlParam = highlighted.size ? `?hl=${ids}` : '';
-        router.push(path + hlParam, undefined, { shallow: true });
+        // Only update the URL when we're on a viewer route (prevent interfering
+        // with navigation back to the homepage or other non-viewer pages).
+        const isViewerRoute =
+            router.pathname === '/[code]' ||
+            router.pathname === '/remote' ||
+            Boolean(router.query.code);
+        if (!isViewerRoute) {
+            return;
+        }
+
+        // If a route change is in progress, skip updating hl to avoid fighting
+        // the user's navigation (this prevents the URL from being immediately
+        // overwritten while clicking links).
+        if (navigatingRef.current) return;
+
+        // Preserve other query parameters (e.g. `path`, `remote`, `code`) when
+        // adding/removing `hl` to avoid clobbering remote loads and causing a
+        // push/restore loop between different pieces of code.
+        const newQuery: { [k: string]: any } = { ...router.query };
+        if (highlighted.size) {
+            newQuery.hl = ids;
+        } else {
+            delete newQuery.hl;
+        }
+
+        router.push({ pathname: router.pathname, query: newQuery }, undefined, { shallow: true });
     }, [highlighted, router]);
 
     // Toggles the highlighted state of an id

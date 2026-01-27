@@ -1,5 +1,6 @@
 import { SystemStatistics_Disk } from '../../../../proto/spark_pb';
-import { formatBytes } from '../../../util/format';
+import { formatBytesLocalized } from '../../../util/format';
+import { useLanguage } from '../../../../../i18n';
 import { Formatter, WidgetFormat } from '../format';
 import Widget from '../Widget';
 import WidgetSingleValue from '../WidgetSingleValue';
@@ -9,6 +10,7 @@ export interface DiskWidgetProps {
 }
 
 export default function DiskWidget({ disk }: DiskWidgetProps) {
+    const { t } = useLanguage();
     const formatter: Formatter = {
         color: (value, total) => {
             const percent = value / total;
@@ -21,7 +23,7 @@ export default function DiskWidget({ disk }: DiskWidgetProps) {
             }
         },
         format: value => {
-            return formatBytes(value);
+            return formatBytesLocalized(value, t);
         },
     };
 

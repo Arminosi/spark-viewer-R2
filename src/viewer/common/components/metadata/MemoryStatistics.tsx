@@ -3,7 +3,8 @@ import {
     PlatformStatistics_Memory,
     PlatformStatistics_Memory_MemoryUsage,
 } from '../../../proto/spark_pb';
-import { formatBytes } from '../../util/format';
+import { formatBytes, formatBytesLocalized } from '../../util/format';
+import { useLanguage } from '../../../../i18n';
 import { WidgetFormat } from '../widgets/format';
 
 export interface MemoryStatisticsProps {
@@ -15,6 +16,7 @@ export default function MemoryStatistics({
     memory,
     gc,
 }: MemoryStatisticsProps) {
+    const { t } = useLanguage();
     return (
         <>
             <h2>Memory Areas</h2>
@@ -95,14 +97,14 @@ const MemoryUsageBar = ({
             </div>
             <ul>
                 <li>
-                    Used: <span>{formatBytes(used)}</span>
+                    Used: <span>{formatBytesLocalized(used, t)}</span>
                 </li>
                 <li>
-                    Committed: <span>{formatBytes(committed)}</span>
+                    Committed: <span>{formatBytesLocalized(committed, t)}</span>
                 </li>
                 {max !== -1 && max !== committed && (
                     <li>
-                        Max: <span>{formatBytes(max)}</span>
+                        Max: <span>{formatBytesLocalized(max, t)}</span>
                     </li>
                 )}
             </ul>

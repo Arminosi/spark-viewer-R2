@@ -5,6 +5,25 @@
             margin: auto;
         }
 
+        .metadata-grid {
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            gap: 18px;
+            align-items: start;
+
+            @media screen and (max-width: 900px) {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .widgets-column {
+            position: relative;
+        }
+
+        .metadata-column {
+            min-width: 0;
+        }
+
         .metadata-detail {
             margin-top: 0;
 

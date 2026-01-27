@@ -24,6 +24,7 @@ const RemoteViewer: NextPageWithLayout = () => {
     const [status, setStatus] = useState(LOADING_DATA);
     const [initialResult, setInitialResult] = useState<FetchResult | null>(null);
     const [errorMessage, setErrorMessage] = useState<string>('');
+    const [progress, setProgress] = useState<number | undefined>(undefined);
 
     useEffect(() => {
         const downloadPath = router.query.path as string;
@@ -31,8 +32,17 @@ const RemoteViewer: NextPageWithLayout = () => {
 
         (async () => {
             try {
-                // Load remote file
-                const result = await fetchFromRemote(downloadPath);
+                // Reset progress
+                setProgress(undefined);
+
+                // Load remote file with progress callback
+                const result = await fetchFromRemote(downloadPath, (loaded, total) => {
+                    if (total && total > 0) {
+                        setProgress(Math.round((loaded / total) * 100));
+                    } else {
+                        setProgress(undefined);
+                    }
+                });
                 const [, newStatus] = parse(result.type, result.buf);
 
                 // Provide the result directly to the viewer component without
@@ -57,8 +67,15 @@ const RemoteViewer: NextPageWithLayout = () => {
                             );
                             const latestReport = sortedReports[0];
 
-                            // Try to load the latest report
-                            const latestResult = await fetchFromRemote(latestReport.downloadPath);
+                            // Try to load the latest report with progress
+                            setProgress(undefined);
+                            const latestResult = await fetchFromRemote(latestReport.downloadPath, (loaded, total) => {
+                                if (total && total > 0) {
+                                    setProgress(Math.round((loaded / total) * 100));
+                                } else {
+                                    setProgress(undefined);
+                                }
+                            });
                             const [, latestStatus] = parse(latestResult.type, latestResult.buf);
 
                             setInitialResult(latestResult);
@@ -77,7 +94,18 @@ const RemoteViewer: NextPageWithLayout = () => {
     }, [router.query.path, router]);
 
     if (status === LOADING_DATA) {
-        return <TextBox>{errorMessage || '正在加载远程报告...'}</TextBox>;
+        // Show progress bar when downloading
+        const ProgressBar = require('../components/ProgressBar').default;
+        return (
+            <TextBox>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'stretch', width: '100%' }}>
+                        <div>{errorMessage || '正在加载远程报告...'}</div>
+                        <div style={{ width: '100%' }}>
+                            <ProgressBar percent={progress} />
+                        </div>
+                    </div>
+                </TextBox>
+        );
     }
 
     if (status === FAILED_DATA) {
