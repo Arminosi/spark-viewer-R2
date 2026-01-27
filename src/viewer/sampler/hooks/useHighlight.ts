@@ -152,7 +152,7 @@ export default function useHighlight(): Highlight {
     );
 
     const replaceSilently: Highlight['replaceSilently'] = useCallback(
-        node => {
+        (node: VirtualNode) => {
             const newSet = new Set<number>();
             setAdd(newSet, node.getId());
             // Mark to skip URL update on next effect run
