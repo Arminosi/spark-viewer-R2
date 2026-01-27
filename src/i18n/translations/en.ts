@@ -44,6 +44,17 @@ export const en = {
     and: 'and',
     built: 'built',
   },
+  homepage: {
+    openRemoteReports: 'Open Remote Reports',
+    viewerTitle: 'Spark Profiler Viewer',
+    viewerDescription: 'This website is an online viewer for spark profiling data.',
+    howToUseTitle: 'How to use:',
+    step1: 'Generate a profile or heap summary using the appropriate spark commands, then load the resulting file here.',
+    step2: 'After the data has been uploaded, open the viewer from the viewer UI.',
+    alternativeMethod: 'You can also generate or export a',
+    or: 'or',
+    file: 'file and open it by dragging it into the box below.',
+  },
   viewer: {
     allView: {
       title: 'All View',
