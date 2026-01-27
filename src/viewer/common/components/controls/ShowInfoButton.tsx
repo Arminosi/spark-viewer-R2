@@ -1,5 +1,6 @@
 import { faGauge, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import FaButton from '../../../../components/FaButton';
+import { useLanguage } from '../../../../i18n';
 import { SparkMetadata } from '../../../proto/guards';
 import { MetadataToggle } from '../../hooks/useMetadataToggle';
 
@@ -12,6 +13,7 @@ export default function ShowInfoButton({
     metadata,
     metadataToggle,
 }: ShowInfoButtonProps) {
+    const { t } = useLanguage();
     if (!metadata.platform) {
         return null;
     }
@@ -21,7 +23,7 @@ export default function ShowInfoButton({
             <FaButton
                 icon={faGauge}
                 onClick={metadataToggle.toggleWidgets}
-                title="Click to toggle the widgets"
+                title={t('viewer.controls.toggleWidgets')}
                 extraClassName={
                     metadataToggle.showWidgets ? 'toggled' : undefined
                 }
@@ -29,7 +31,7 @@ export default function ShowInfoButton({
             <FaButton
                 icon={faInfoCircle}
                 onClick={metadataToggle.toggleInfo}
-                title="Click to toggle the detailed metadata display"
+                title={t('viewer.controls.toggleMetadata')}
                 extraClassName={metadataToggle.showInfo ? 'toggled' : undefined}
             />
         </>
