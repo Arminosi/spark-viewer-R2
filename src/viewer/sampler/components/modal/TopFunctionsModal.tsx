@@ -172,8 +172,8 @@ export default function TopFunctionsModal({
         }, 10);
 
         return () => clearTimeout(handle);
-    // intentionally exclude topSourcesCache from deps (stable), include funcs and flags
-    }, [isOpen, topFunctions, resolveToTreeNode, quickFirst]);
+        // intentionally exclude topSourcesCache from deps (stable), include funcs and flags
+    }, [isOpen, topFunctions, resolveToTreeNode, quickFirst, metadata, topSourcesCache]);
 
     if (!isOpen) return null;
 
