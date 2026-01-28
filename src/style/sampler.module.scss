@@ -50,7 +50,7 @@
                     }
                 }
 
-                &:hover + ul {
+                &:hover+ul {
                     background: #242b2f;
                     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
                     border-radius: 3px;
@@ -66,8 +66,7 @@
 
             .name {
                 color: #bcbcbc;
-                background: url(data:image/svg+xml;base64,PHN2ZyBhcmlhLWhpZGRlbj0idHJ1ZSIgZm9jdXNhYmxlPSJmYWxzZSIgcm9sZT0iaW1nIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0NDggNTEyIj48cGF0aCBmaWxsPSIjYjViNWI1IiBkPSJNNDQ4IDgwdjM1MmMwIDI2LjUtMjEuNSA0OC00OCA0OEg0OGMtMjYuNSAwLTQ4LTIxLjUtNDgtNDhWODBjMC0yNi41IDIxLjUtNDggNDgtNDhoMzUyYzI2LjUgMCA0OCAyMS41IDQ4IDQ4ek05Mi41IDIyMC41bDEyMyAxMjNjNC43IDQuNyAxMi4zIDQuNyAxNyAwbDEyMy0xMjNjNy42LTcuNiAyLjItMjAuNS04LjUtMjAuNUgxMDFjLTEwLjcgMC0xNi4xIDEyLjktOC41IDIwLjV6Ij48L3BhdGg+PC9zdmc+)
-                    center left no-repeat;
+                background: url(data:image/svg+xml;base64,PHN2ZyBhcmlhLWhpZGRlbj0idHJ1ZSIgZm9jdXNhYmxlPSJmYWxzZSIgcm9sZT0iaW1nIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0NDggNTEyIj48cGF0aCBmaWxsPSIjYjViNWI1IiBkPSJNNDQ4IDgwdjM1MmMwIDI2LjUtMjEuNSA0OC00OCA0OEg0OGMtMjYuNSAwLTQ4LTIxLjUtNDgtNDhWODBjMC0yNi41IDIxLjUtNDggNDgtNDhoMzUyYzI2LjUgMCA0OCAyMS41IDQ4IDQ4ek05Mi41IDIyMC41bDEyMyAxMjNjNC43IDQuNyAxMi4zIDQuNyAxNyAwbDEyMy0xMjNjNy42LTcuNiAyLjItMjAuNS04LjUtMjAuNUgxMDFjLTEwLjcgMC0xNi4xIDEyLjktOC41IDIwLjV6Ij48L3BhdGg+PC9zdmc+) center left no-repeat;
                 background-size: 8px;
                 background-position: 6px 50%;
                 padding-left: 20px;
@@ -118,18 +117,31 @@
 
             .bar {
                 display: block;
-                min-width: 100px;
-                height: 15px;
+                width: 60px;
+                /* Reduced width */
+                min-width: 60px;
+                max-width: 60px;
+                height: 6px;
+                /* Thinner */
                 margin-top: 0;
                 margin-left: 8px;
-                border: 1px solid #484848;
-                background: #293134;
+                margin-right: 15px;
+                border: 1px solid #3c3f41;
+                /* Softer border */
+                background: #1e2224;
+                /* Darker background */
                 align-self: center;
+                flex-shrink: 0;
+                border-radius: 3px;
+                /* Rounded */
+                overflow: hidden;
+                /* Ensure inner bar stays inside */
 
                 .inner {
-                    display: inline-block;
-                    height: 15px;
+                    display: block;
+                    height: 100%;
                     background: #e2b671;
+                    border-radius: 2px;
                 }
 
                 @media screen and (max-width: 880px) {
@@ -141,18 +153,18 @@
                 color: #5f5f5f;
             }
 
-                
+
         }
 
         .sourceview {
             .stack {
                 margin-bottom: 40px;
 
-                > li {
+                >li {
                     margin-left: 10px;
                 }
 
-                > h2 > span {
+                >h2>span {
                     font-size: 100%;
                     color: #888;
                 }
@@ -161,16 +173,16 @@
             .other-sources {
                 padding-left: 10px;
 
-                li > span {
+                li>span {
                     color: #888;
                 }
             }
         }
 
-        .graph > .header,
-        .allview > .header,
-        .flatview > .header,
-        .sourceview > .header {
+        .graph>.header,
+        .allview>.header,
+        .flatview>.header,
+        .sourceview>.header {
             margin: 0 10px;
             max-width: 1000px;
             font-size: 16px;
@@ -196,6 +208,7 @@
                     color: #b5b5b5;
                 }
             }
+
             .top-functions-button {
                 margin-left: auto;
 
@@ -215,7 +228,7 @@
                 button:hover {
                     transform: none;
                 }
-                
+
                 button span {
                     color: #111;
                 }
@@ -228,7 +241,7 @@
             box-sizing: border-box;
             border-radius: 0.5rem;
 
-            > div > div {
+            >div>div {
                 overflow-x: clip !important;
                 overflow-y: auto !important;
             }
@@ -291,7 +304,7 @@
     color: orange;
     text-align: center;
 
-    > svg {
+    >svg {
         float: right;
         padding: 10px;
         color: #b5b5b5;

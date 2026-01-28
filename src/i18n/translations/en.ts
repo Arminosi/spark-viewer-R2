@@ -88,6 +88,11 @@ export const en = {
       GC: 'GC',
       TPS: 'TPS',
       MSPT: 'MSPT',
+      performance: 'Performance',
+      cpu: 'Processor / Disk',
+      memory: 'Memory',
+      disk: 'Disk',
+      gc: 'Garbage Collection',
     },
     units: {
       bytes: 'bytes',

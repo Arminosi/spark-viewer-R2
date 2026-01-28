@@ -88,6 +88,11 @@ export const zh = {
       GC: 'GC',
       TPS: 'TPS',
       MSPT: 'MSPT',
+      performance: '性能',
+      cpu: '处理器 / 硬盘',
+      memory: '内存',
+      disk: '磁盘',
+      gc: '垃圾回收',
     },
     units: {
       bytes: '字节',
