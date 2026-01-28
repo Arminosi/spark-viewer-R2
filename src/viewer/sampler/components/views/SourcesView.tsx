@@ -14,6 +14,8 @@ import SourcesViewHeader from './header/SourcesViewHeader';
 import TopFunctionsButton from './button/TopFunctionsButton';
 import TopFunctionsModal from '../modal/TopFunctionsModal';
 import { getTopFunctions, TopFunction } from '../../utils/topFunctions';
+import Panel from '../../../common/components/Panel';
+import { useLanguage } from '../../../../i18n';
 
 import { View } from '../views/types';
 import ViewSwitcher from './button/ViewSwitcher';
@@ -44,47 +46,49 @@ export default function SourcesView({
     const sourceNodes = merged ? viewData?.sourcesMerged : viewData?.sourcesSeparate;
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [topFunctions, setTopFunctions] = useState<TopFunction[]>([]);
+    const { t } = useLanguage();
 
     return (
-        <>
-            <div className="sourceview">
-                <SourcesViewHeader>
-                    <TopFunctionsButton onClick={() => {
-                        const functions = getTopFunctions(data, 20);
-                        setTopFunctions(functions);
-                        setIsModalOpen(true);
-                    }} />
-                    <div style={{ marginLeft: 6 }}></div>
-                    <ViewSwitcher
-                        metadata={metadata}
-                        view={view}
-                        setView={setView}
-                        sourcesViewSupported={sourcesViewSupported}
-                    />
-                    <LabelModeButton
-                        labelMode={labelMode}
-                        setLabelMode={setLabelMode}
-                    />
-                    <MergeModeButton merged={merged} setMerged={setMerged} />
-                </SourcesViewHeader>
+        <Panel
+            className="sourceview"
+            title={t('viewer.sourcesView.modsTitle') || t('viewer.sourcesView.pluginsTitle') || 'Sources View'}
+        >
+            <SourcesViewHeader>
+                <TopFunctionsButton onClick={() => {
+                    const functions = getTopFunctions(data, 20);
+                    setTopFunctions(functions);
+                    setIsModalOpen(true);
+                }} />
+                <div style={{ marginLeft: 6 }}></div>
+                <ViewSwitcher
+                    metadata={metadata}
+                    view={view}
+                    setView={setView}
+                    sourcesViewSupported={sourcesViewSupported}
+                />
+                <LabelModeButton
+                    labelMode={labelMode}
+                    setLabelMode={setLabelMode}
+                />
+                <MergeModeButton merged={merged} setMerged={setMerged} />
+            </SourcesViewHeader>
 
-                {!sourceNodes ? (
-                    <TextBox>Loading...</TextBox>
-                ) : (
-                    <>
-                        {sourceNodes.map(viewData => (
-                            <SourceSection
-                                data={data}
-                                viewData={viewData}
-                                key={viewData.source}
-                            />
-                        ))}
-                        <OtherSourcesSection
-                            alreadyShown={sourceNodes.map(s => s.source)}
+            {!sourceNodes ? (
+                <TextBox>Loading...</TextBox>
+            ) : (
+                <>
+                    {sourceNodes.map(viewData => (
+                        <SourceSection
+                            data={data}
+                            viewData={viewData}
+                            key={viewData.source}
                         />
-                    </>
-                )}
-            </div>
+                    ))}
+                    <OtherSourcesSection
+                        alreadyShown={sourceNodes.map(s => s.source)}
+                    />
+                </>
+            )}
             <TopFunctionsModal
                 topFunctions={topFunctions}
                 isOpen={isModalOpen}
@@ -104,7 +108,7 @@ export default function SourcesView({
                 }}
                 data={data}
             />
-        </>
+        </Panel>
     );
 }
 

@@ -93,6 +93,7 @@ export const en = {
       memory: 'Memory',
       disk: 'Disk',
       gc: 'Garbage Collection',
+      systemDetails: 'System Details',
     },
     units: {
       bytes: 'bytes',
@@ -132,6 +133,7 @@ export const en = {
       toggleView: 'Toggle view',
     },
     metadata: {
+      title: 'Server Metadata',
       networkInterfaces: 'Network Interfaces',
       pluginsMods: 'Plugins/Mods',
       dataPacks: 'Data Packs',
@@ -141,6 +143,19 @@ export const en = {
     },
     graph: {
       refine: 'Refine',
+    },
+    settings: {
+      mappings: {
+        title: 'Mappings',
+        description: 'Select which deobfuscation mappings the viewer should use when displaying profiler frames.',
+      },
+      infoPoints: {
+        title: 'Info Points',
+        description: 'Select whether info points should be shown.',
+      },
+    },
+    flame: {
+      title: 'Flame Graph',
     },
     failedLoad: {
       message: 'Unable to load the data. Perhaps it expired? Are you using a recent version?',

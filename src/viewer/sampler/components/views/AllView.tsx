@@ -8,6 +8,8 @@ import TopFunctionsButton from './button/TopFunctionsButton';
 import TopFunctionsModal from '../modal/TopFunctionsModal';
 import { getTopFunctions, TopFunction } from '../../utils/topFunctions';
 import AllViewHeader from './header/AllViewHeader';
+import Panel from '../../../common/components/Panel';
+import { useLanguage } from '../../../../i18n';
 
 import { View } from '../views/types';
 import ViewSwitcher from './button/ViewSwitcher';
@@ -88,8 +90,13 @@ export default function AllView({
         setTimeout(() => tryScroll(), 50);
     }
 
+    const { t } = useLanguage();
+
     return (
-        <div className="allview">
+        <Panel
+            className="allview"
+            title={t('viewer.allView.title') || 'All View'}
+        >
             <AllViewHeader>
                 <TopFunctionsButton onClick={handleOpenModal} />
                 <div style={{ marginLeft: 6 }}></div>
@@ -121,6 +128,6 @@ export default function AllView({
                 onFunctionClick={handleFunctionClick}
                 data={data}
             />
-        </div>
+        </Panel>
     );
 }

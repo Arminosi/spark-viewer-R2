@@ -12,6 +12,8 @@ export interface GraphProps {
     windowStatistics: Record<number, WindowStatistics>;
 }
 
+import Panel from '../../../common/components/Panel';
+
 export default function Graph({
     show,
     timeSelector,
@@ -85,8 +87,7 @@ export default function Graph({
     }
 
     return (
-        <div className="graph">
-            <h3>{t('viewer.sampler.refine.title')}</h3>
+        <Panel className="graph" title={t('viewer.sampler.refine.title')}>
             <div className="header-controls">
                 <p>{t('viewer.sampler.refine.description')}</p>
             </div>
@@ -108,6 +109,6 @@ export default function Graph({
                 statisticKeys={statisticKeys}
                 setStatisticKeys={setStatisticKeys}
             />
-        </div>
+        </Panel>
     );
 }

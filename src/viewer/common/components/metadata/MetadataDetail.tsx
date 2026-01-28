@@ -16,6 +16,7 @@ import PlatformStatistics from './PlatformStatistics';
 import PluginsModsList from './PluginsModsList';
 import ServerConfigurations from './ServerConfigurations';
 import WorldStatistics from './WorldStatistics';
+import Panel from '../Panel';
 
 interface MetadataDetailProps {
     metadata: SparkMetadata;
@@ -90,70 +91,72 @@ export default function MetadataDetail({ metadata }: MetadataDetailProps) {
     };
 
     return (
-        <div className="textbox metadata-detail">
-            <div className="metadata-detail-controls">
-                {Object.entries(views).map(([name, func]) => {
-                    return (
-                        !!func() && (
-                            <div
-                                key={name}
-                                onClick={() => setView(name)}
-                                className={
-                                    view === name ? 'toggled' : undefined
-                                }
-                            >
-                                {name}
-                            </div>
-                        )
-                    );
-                })}
-            </div>
+        <Panel title={t('viewer.metadata.title') || 'Server Metadata'} defaultExpanded={false}>
+            <div className="textbox metadata-detail">
+                <div className="metadata-detail-controls">
+                    {Object.entries(views).map(([name, func]) => {
+                        return (
+                            !!func() && (
+                                <div
+                                    key={name}
+                                    onClick={() => setView(name)}
+                                    className={
+                                        view === name ? 'toggled' : undefined
+                                    }
+                                >
+                                    {name}
+                                </div>
+                            )
+                        );
+                    })}
+                </div>
 
-            <div className="metadata-detail-content">
-                {view === t('viewer.metadataTabs.platform') ? (
-                    <PlatformStatistics
-                        platform={platform!}
-                        platformStatistics={platformStatistics!}
-                        systemStatistics={systemStatistics}
-                        platformType={platformType}
-                        onlineMode={onlineMode}
-                        runningTime={runningTime}
-                        numberOfTicks={numberOfTicks}
-                        numberOfIncludedTicks={numberOfIncludedTicks}
-                        engine={samplerEngine}
-                    />
-                ) : view === t('viewer.metadataTabs.memory') ? (
-                    <MemoryStatistics
-                        memory={platformStatistics?.memory!}
-                        gc={platformStatistics?.gc!}
-                    />
-                ) : view === t('viewer.metadataTabs.network') ? (
-                    <NetworkStatistics systemStatistics={systemStatistics!} />
-                ) : view === t('viewer.metadataTabs.jvmFlags') ? (
-                    <JvmStartupArgs systemStatistics={systemStatistics!} />
-                ) : view === t('viewer.metadataTabs.configurations') ? (
-                    <ServerConfigurations
-                        parsedConfigurations={parsedConfigurations!}
-                    />
-                ) : view === t('viewer.metadataTabs.world') ? (
-                    <WorldStatistics
-                        worldStatistics={platformStatistics!.world!}
-                    />
-                ) : view === t('viewer.metadataTabs.gameRules') ? (
-                    <GameRules
-                        gameRules={platformStatistics?.world?.gameRules!}
-                    />
-                ) : view === t('viewer.metadataTabs.pluginsMods') ? (
-                    <PluginsModsList
-                        plugins={Object.values(metadata.sources || {})}
-                        dataPacks={platformStatistics?.world?.dataPacks || []}
-                    />
-                ) : view === t('viewer.metadataTabs.misc') ? (
-                    <ExtraPlatformMetadata data={parsedExtraMetadata!} />
-                ) : (
-                    <p>Unknown view.</p>
-                )}
+                <div className="metadata-detail-content">
+                    {view === t('viewer.metadataTabs.platform') ? (
+                        <PlatformStatistics
+                            platform={platform!}
+                            platformStatistics={platformStatistics!}
+                            systemStatistics={systemStatistics}
+                            platformType={platformType}
+                            onlineMode={onlineMode}
+                            runningTime={runningTime}
+                            numberOfTicks={numberOfTicks}
+                            numberOfIncludedTicks={numberOfIncludedTicks}
+                            engine={samplerEngine}
+                        />
+                    ) : view === t('viewer.metadataTabs.memory') ? (
+                        <MemoryStatistics
+                            memory={platformStatistics?.memory!}
+                            gc={platformStatistics?.gc!}
+                        />
+                    ) : view === t('viewer.metadataTabs.network') ? (
+                        <NetworkStatistics systemStatistics={systemStatistics!} />
+                    ) : view === t('viewer.metadataTabs.jvmFlags') ? (
+                        <JvmStartupArgs systemStatistics={systemStatistics!} />
+                    ) : view === t('viewer.metadataTabs.configurations') ? (
+                        <ServerConfigurations
+                            parsedConfigurations={parsedConfigurations!}
+                        />
+                    ) : view === t('viewer.metadataTabs.world') ? (
+                        <WorldStatistics
+                            worldStatistics={platformStatistics!.world!}
+                        />
+                    ) : view === t('viewer.metadataTabs.gameRules') ? (
+                        <GameRules
+                            gameRules={platformStatistics?.world?.gameRules!}
+                        />
+                    ) : view === t('viewer.metadataTabs.pluginsMods') ? (
+                        <PluginsModsList
+                            plugins={Object.values(metadata.sources || {})}
+                            dataPacks={platformStatistics?.world?.dataPacks || []}
+                        />
+                    ) : view === t('viewer.metadataTabs.misc') ? (
+                        <ExtraPlatformMetadata data={parsedExtraMetadata!} />
+                    ) : (
+                        <p>Unknown view.</p>
+                    )}
+                </div>
             </div>
-        </div>
+        </Panel>
     );
 }

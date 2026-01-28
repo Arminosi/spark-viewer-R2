@@ -18,6 +18,8 @@ import FlatViewHeader from './header/FlatViewHeader';
 import TopFunctionsButton from './button/TopFunctionsButton';
 import TopFunctionsModal from '../modal/TopFunctionsModal';
 import { getTopFunctions, TopFunction } from '../../utils/topFunctions';
+import Panel from '../../../common/components/Panel';
+import { useLanguage } from '../../../../i18n';
 
 export const BottomUpContext = createContext(false);
 
@@ -51,13 +53,17 @@ export default function FlatView({
     const [selfTimeMode, setSelfTimeMode] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [topFunctions, setTopFunctions] = useState<TopFunction[]>([]);
+    const { t } = useLanguage();
 
     const nodes = selfTimeMode
         ? viewData?.flatSelfTime
         : viewData?.flatTotalTime;
 
     return (
-        <div className="flatview">
+        <Panel
+            className="flatview"
+            title={t('viewer.flatView.title') || 'Flat View'}
+        >
             <FlatViewHeader>
                 <TopFunctionsButton onClick={() => {
                     const functions = getTopFunctions(data, 20);
@@ -116,6 +122,6 @@ export default function FlatView({
                 }}
                 data={data}
             />
-        </div>
+        </Panel>
     );
 }

@@ -1,0 +1,41 @@
+.container {
+    position: relative;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    background: #1a1d1f;
+    border-radius: 4px;
+}
+
+.canvas {
+    display: block;
+    cursor: pointer;
+}
+
+.tooltip {
+    position: fixed;
+    background: rgba(0, 0, 0, 0.9);
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    pointer-events: none;
+    z-index: 1000;
+    white-space: pre;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    border: 1px solid #444;
+
+    div {
+        margin: 2px 0;
+
+        &:first-child {
+            font-weight: 600;
+            color: #4fc3f7;
+        }
+
+        &:last-child {
+            color: #aaa;
+        }
+    }
+}

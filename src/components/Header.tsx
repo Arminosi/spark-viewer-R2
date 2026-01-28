@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDatabase, faClockRotateLeft } from '@fortawesome/free-solid-svg-icons';
 import RemoteReportsModal from './RemoteReportsModal';
 import HistoryModal from './HistoryModal';
 import SparkLogo from '../assets/spark-logo.svg';
@@ -38,7 +40,7 @@ export default function Header({ title = 'Artstyle | Spark Profiler' }: HeaderPr
                             onClick={() => setIsModalOpen(true)}
                             title={t('header.openRemoteReports')}
                         >
-                            <span className={styles.buttonIcon}>📡</span>
+                            <FontAwesomeIcon icon={faDatabase} className={styles.buttonIcon} />
                             <span className={styles.buttonText}>{t('header.remoteReports')}</span>
                         </button>
                         <button
@@ -46,7 +48,7 @@ export default function Header({ title = 'Artstyle | Spark Profiler' }: HeaderPr
                             onClick={() => setIsHistoryOpen(true)}
                             title={t('history.openHistory')}
                         >
-                            <span className={styles.buttonIcon}>🕒</span>
+                            <FontAwesomeIcon icon={faClockRotateLeft} className={styles.buttonIcon} />
                             <span className={styles.buttonText}>{t('history.title')}</span>
                         </button>
                         <button

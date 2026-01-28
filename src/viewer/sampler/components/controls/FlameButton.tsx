@@ -8,22 +8,28 @@ import SamplerData from '../../SamplerData';
 export interface FlameButtonProps {
     data: SamplerData;
     setFlameData: Dispatch<SetStateAction<VirtualNode | undefined>>;
+    flameData?: VirtualNode;
 }
 
-export default function FlameButton({ data, setFlameData }: FlameButtonProps) {
+export default function FlameButton({ data, setFlameData, flameData }: FlameButtonProps) {
     if (data.threads.length !== 1) {
         return null;
     }
 
     function onClick() {
-        setFlameData(new BasicVirtualNode(data, data.threads[0]));
+        if (flameData) {
+            setFlameData(undefined);
+        } else {
+            setFlameData(new BasicVirtualNode(data, data.threads[0]));
+        }
     }
 
     return (
         <FaButton
             icon={faFire}
             onClick={onClick}
-            title="View the profile as a Flame Graph"
+            title="Toggle Flame Graph"
+            extraClassName={flameData ? 'toggled' : undefined}
         />
     );
 }

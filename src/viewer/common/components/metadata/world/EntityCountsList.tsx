@@ -26,7 +26,7 @@ export default function EntityCountsList({
                             <Suspense fallback={<span style={{ width: 16, height: 16, display: 'inline-block' }} />}>
                                 <MinecraftIcon name={name} />
                             </Suspense>
-                            <span>{name}:</span>
+                            <span>{name}</span>
                         </div>
                         <span style={{ color: '#fff' }}>{count}</span>
                     </li>

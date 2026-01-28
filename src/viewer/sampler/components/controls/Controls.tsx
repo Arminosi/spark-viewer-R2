@@ -1,7 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 import styles from '../../../../style/controls.module.scss';
 import ExportButton from '../../../common/components/controls/ExportButton';
-import ShowInfoButton from '../../../common/components/controls/ShowInfoButton';
 import { MetadataToggle } from '../../../common/hooks/useMetadataToggle';
 import { ExportCallback } from '../../../common/logic/export';
 import { SamplerMetadata } from '../../../proto/spark_pb';
@@ -11,9 +10,6 @@ import VirtualNode from '../../node/VirtualNode';
 import SamplerData from '../../SamplerData';
 import SamplerTitle from '../SamplerTitle';
 import { View } from '../views/types';
-import ExitFlameButton from './ExitFlameButton';
-import FlameButton from './FlameButton';
-import GraphButton from './GraphButton';
 import LastUpdateSpinner from './LastUpdateSpinner';
 import SearchBar from './SearchBar';
 import SettingsButton from './SettingsButton';
@@ -63,29 +59,12 @@ export default function Controls({
     return (
         <div className={styles.controls}>
             <SamplerTitle metadata={metadata} />
-            <ShowInfoButton
-                metadata={metadata}
-                metadataToggle={metadataToggle}
-            />
-            <GraphButton
-                graphSupported={graphSupported}
-                showGraph={showGraph}
-                setShowGraph={setShowGraph}
-            />
             <SettingsButton
                 showSettings={showSettings}
                 setShowSettings={setShowSettings}
             />
-            {!flameData ? (
-                <>
-
-                    <FlameButton data={data} setFlameData={setFlameData} />
-                    <ExportButton exportCallback={exportCallback} />
-                    <SearchBar searchQuery={searchQuery} />
-                </>
-            ) : (
-                <ExitFlameButton setFlameData={setFlameData} />
-            )}
+            <ExportButton exportCallback={exportCallback} />
+            <SearchBar searchQuery={searchQuery} />
             <LastUpdateSpinner
                 socket={socket}
                 showSocketInfo={showSocketInfo}
