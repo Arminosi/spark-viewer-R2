@@ -173,6 +173,11 @@ export const zh = {
     type: '类型',
     id: '文件名',
     confirmClear: '确定要清除所有历史记录吗？',
+    types: {
+      official: '官方库',
+      remote: '远程',
+      local: '本地',
+    },
   },
   ...zhPlatformInfo,
 };

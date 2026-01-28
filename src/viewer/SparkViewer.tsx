@@ -203,13 +203,14 @@ export default function SparkViewer({ initialResult }: SparkViewerProps) {
                 setStatus(status);
 
                 // Add to history if successful
-                if (status !== FAILED_DATA && code !== '_') {
-                    let type: 'remote' | 'bytebin' = 'bytebin';
+                if (status !== FAILED_DATA) {
+                    let type: 'remote' | 'bytebin' | 'local' = 'bytebin';
                     let id = code;
+                    let title = code;
 
-                    if (isRemote && result && 'type' in result) { // it's remote
+                    // Remote Logic
+                    if (isRemote && result && 'type' in result) {
                         type = 'remote';
-                        // We need the original path for the ID
                         const sessionData = sessionStorage.getItem(remoteDataKey)
                             || localStorage.getItem(remoteDataKey);
                         if (sessionData) {
@@ -218,12 +219,31 @@ export default function SparkViewer({ initialResult }: SparkViewerProps) {
                                 id = parsed.downloadPath;
                             }
                         }
+                        title = decodeURIComponent(id).split('/').pop() || id;
+                    }
+                    // Local File Logic
+                    else if (code === '_') {
+                        type = 'local';
+                        const filename = selectedFile?.name || 'local-file';
+                        title = filename;
+                        // Generate a unique ID for IDB
+                        id = `local_${Date.now()}_${filename}`;
+
+                        // Save to IndexedDB asynchronously
+                        import('./common/util/idb').then(({ idbPut }) => {
+                            idbPut(id, result.buf).catch(e => console.warn('Failed to cache local file', e));
+                        });
+                    }
+                    // Bytebin Logic
+                    else {
+                        // Keep ID as code
+                        title = id; // Or fetch metadata title if available? Usually just code.
                     }
 
                     addToHistory({
                         id,
                         type,
-                        title: decodeURIComponent(id).split('/').pop(), // Simple filename as title
+                        title,
                         description: new Date().toLocaleString()
                     });
                 }

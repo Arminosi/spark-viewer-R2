@@ -28,6 +28,8 @@ export default function HistoryModal({ isOpen, onClose }: HistoryModalProps) {
                 router.push(`/remote?path=${encodeURIComponent(item.id)}`);
             } else if (item.type === 'bytebin') {
                 router.push(`/${item.id}`);
+            } else if (item.type === 'local' || item.type === 'file') {
+                router.push(`/local?id=${encodeURIComponent(item.id)}`);
             }
         },
         [router, onClose]
@@ -89,8 +91,10 @@ export default function HistoryModal({ isOpen, onClose }: HistoryModalProps) {
                                     <span className={styles.timestamp}>
                                         {new Date(item.timestamp).toLocaleString(language === 'zh-CN' ? 'zh-CN' : 'en-US')}
                                     </span>
-                                    <span className={styles.size}>
-                                        {item.type === 'bytebin' ? 'Official' : 'Remote'}
+                                    <span className={`${styles.typeTag} ${styles[item.type === 'file' ? 'local' : item.type]}`}>
+                                        {item.type === 'bytebin' ? t('history.types.official') :
+                                            item.type === 'remote' ? t('history.types.remote') :
+                                                t('history.types.local')}
                                     </span>
                                     <span className={styles.size} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={item.id}>
                                         {item.title || item.id.replace(/^.*[\\/]/, '')}

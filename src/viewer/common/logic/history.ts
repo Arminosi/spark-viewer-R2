@@ -1,7 +1,7 @@
 
 export interface HistoryItem {
     id: string; // code or full URL
-    type: 'bytebin' | 'remote' | 'file';
+    type: 'bytebin' | 'remote' | 'file' | 'local';
     timestamp: number;
     title?: string; // Optional nice name
     description?: string; // e.g. "Server Health" or "Profile"
@@ -23,8 +23,7 @@ export function getHistory(): HistoryItem[] {
 export function addToHistory(item: Omit<HistoryItem, 'timestamp'>) {
     if (typeof localStorage === 'undefined') return;
 
-    // Skip local files for now as we can't persist them easily URL-wise
-    if (item.type === 'file') return;
+
 
     try {
         const history = getHistory();

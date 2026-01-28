@@ -173,6 +173,11 @@ export const en = {
     type: 'Type',
     id: 'Filename',
     confirmClear: 'Are you sure you want to clear the history?',
+    types: {
+      official: 'Official',
+      remote: 'Remote',
+      local: 'Local',
+    },
   },
   ...enPlatformInfo,
 };
