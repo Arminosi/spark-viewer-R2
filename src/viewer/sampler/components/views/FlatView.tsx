@@ -62,7 +62,7 @@ export default function FlatView({
     return (
         <Panel
             className="flatview"
-            title={t('viewer.flatView.title') || 'Flat View'}
+            title={t('viewer.functionList') || 'Function List'}
         >
             <FlatViewHeader>
                 <TopFunctionsButton onClick={() => {

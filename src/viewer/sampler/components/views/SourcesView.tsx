@@ -51,7 +51,7 @@ export default function SourcesView({
     return (
         <Panel
             className="sourceview"
-            title={t('viewer.sourcesView.modsTitle') || t('viewer.sourcesView.pluginsTitle') || 'Sources View'}
+            title={t('viewer.functionList') || 'Function List'}
         >
             <SourcesViewHeader>
                 <TopFunctionsButton onClick={() => {

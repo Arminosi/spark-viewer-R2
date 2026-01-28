@@ -48,20 +48,6 @@ export default function AllView({
                 if (functions.length > 0) {
                     const top = functions[0];
                     highlighted.replace(top.node);
-
-                    const idVal = top.node.getId();
-                    const id = `node-${Array.isArray(idVal) ? (idVal as number[]).join('-') : String(idVal)}`;
-
-                    const tryScroll = (attempt = 0) => {
-                        const el = document.getElementById(id);
-                        if (el) {
-                            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        } else if (attempt < 20) {
-                            setTimeout(() => tryScroll(attempt + 1), 100);
-                        }
-                    };
-                    // Wait a bit for the tree expansion to render
-                    setTimeout(() => tryScroll(), 200);
                 }
             }
         }
@@ -95,7 +81,7 @@ export default function AllView({
     return (
         <Panel
             className="allview"
-            title={t('viewer.allView.title') || 'All View'}
+            title={t('viewer.functionList') || 'Function List'}
         >
             <AllViewHeader>
                 <TopFunctionsButton onClick={handleOpenModal} />

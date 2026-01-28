@@ -11,6 +11,7 @@ export interface TopFunction {
     name: string;
     className?: string;
     methodName?: string;
+    source?: string;
 }
 
 /**
@@ -53,6 +54,7 @@ export function getTopFunctions(
                 name,
                 className: details.type === 'stackTrace' ? details.className : undefined,
                 methodName: details.type === 'stackTrace' ? details.methodName : undefined,
+                source: data.sources.getSource(node.id),
             };
         })
         .filter(func => func.selfTime > 0); // Only include functions with positive self time

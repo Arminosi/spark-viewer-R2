@@ -21,6 +21,7 @@ import RemoteSamplerWorker from '../worker/RemoteSamplerWorker';
 import { SourcesViewData } from '../worker/SourceViewGenerator';
 import Controls from './controls/Controls';
 import FlameGraphCanvas from './flamegraph/FlameGraphCanvas';
+import IntelligentAnalyzer from './misc/IntelligentAnalyzer';
 import NoData from './misc/NoData';
 import SocketInfo from './misc/SocketInfo';
 import SamplerContext from './SamplerContext';
@@ -268,6 +269,8 @@ export default function Sampler({
             {showSocketInfo && socket.socket.socket && (
                 <SocketInfo socket={socket} />
             )}
+
+            <IntelligentAnalyzer data={data} highlighted={highlighted} />
 
             {!supported && <VersionWarning />}
 
