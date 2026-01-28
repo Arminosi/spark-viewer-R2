@@ -3,7 +3,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { getHistory, HistoryItem, clearHistory } from '../viewer/common/logic/history';
 import { useLanguage } from '../i18n';
-import styles from '../style/remote-reports-modal.module.scss';
+import styles from '../style/history-modal.module.scss';
 
 interface HistoryModalProps {
     isOpen: boolean;
