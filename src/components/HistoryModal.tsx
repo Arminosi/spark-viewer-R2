@@ -53,21 +53,21 @@ export default function HistoryModal({ isOpen, onClose }: HistoryModalProps) {
             <div className={styles.modal}>
                 <div className={styles.header}>
                     <h2>{t('history.title')}</h2>
-                    <button className={styles.closeButton} onClick={onClose}>
-                        ✕
-                    </button>
+                    <div style={{ marginLeft: 'auto', display: 'flex', gap: '10px', alignItems: 'center' }}>
+                        <button
+                            className={styles.clearButton}
+                            onClick={handleClearHistory}
+                            disabled={history.length === 0}
+                        >
+                            {t('history.clear')}
+                        </button>
+                        <button className={styles.closeButton} onClick={onClose}>
+                            ✕
+                        </button>
+                    </div>
                 </div>
 
-                <div className={styles.filters}>
-                    <div style={{ flex: 1 }}></div>
-                    <button
-                        className={styles.clearButton}
-                        onClick={handleClearHistory}
-                        disabled={history.length === 0}
-                    >
-                        {t('history.clear')}
-                    </button>
-                </div>
+
 
                 <div className={styles.content}>
                     {history.length === 0 && (
