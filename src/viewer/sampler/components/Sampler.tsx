@@ -13,13 +13,14 @@ import useSearchQuery from '../hooks/useSearchQuery';
 import useSocketBindings from '../hooks/useSocketBindings';
 import useSocketClient from '../hooks/useSocketClient';
 import useTimeSelector from '../hooks/useTimeSelector';
+import BasicVirtualNode from '../node/BasicVirtualNode';
 import VirtualNode from '../node/VirtualNode';
 import SamplerData from '../SamplerData';
 import { FlatViewData } from '../worker/FlatViewGenerator';
 import RemoteSamplerWorker from '../worker/RemoteSamplerWorker';
 import { SourcesViewData } from '../worker/SourceViewGenerator';
 import Controls from './controls/Controls';
-import Flame from './flamegraph/Flame';
+import FlameGraphCanvas from './flamegraph/FlameGraphCanvas';
 import NoData from './misc/NoData';
 import SocketInfo from './misc/SocketInfo';
 import SamplerContext from './SamplerContext';
@@ -92,6 +93,11 @@ export default function Sampler({
 
             worker.close();
         })();
+
+        // Initialize flame graph data if there's only one thread
+        if (data.threads.length === 1) {
+            setFlameData(new BasicVirtualNode(data, data.threads[0]));
+        }
     }, [data]);
 
     // WebSocket
@@ -280,50 +286,63 @@ export default function Sampler({
                 </Suspense>
             )}
 
+            <SamplerContext
+                mappings={mappings.mappingsResolver}
+                infoPoints={infoPoints}
+                highlighted={highlighted}
+                searchQuery={searchQuery}
+                labelMode={labelMode}
+                metadata={metadata}
+                timeSelector={timeSelector}
+            >
+                {view === VIEW_ALL ? (
+                    <AllView
+                        data={data}
+                        setLabelMode={setLabelMode}
+                        view={view}
+                        setView={setView}
+                        sourcesViewSupported={data.sources.hasSources()}
+                        metadata={metadata}
+                    />
+                ) : view === VIEW_FLAT ? (
+                    <FlatView
+                        data={data}
+                        viewData={flatViewData}
+                        setLabelMode={setLabelMode}
+                        view={view}
+                        setView={setView}
+                        sourcesViewSupported={data.sources.hasSources()}
+                        metadata={metadata}
+                    />
+                ) : (
+                    <SourcesView
+                        data={data}
+                        viewData={sourcesViewData}
+                        setLabelMode={setLabelMode}
+                        view={view}
+                        setView={setView}
+                        sourcesViewSupported={data.sources.hasSources()}
+                        metadata={metadata}
+                    />
+                )}
+                {infoPoints.enabled && (
+                    <Tooltip
+                        id="infopoint-tooltip"
+                        place="right"
+                        className="infopoint-tooltip"
+                        clickable
+                    />
+                )}
+            </SamplerContext>
+
             {!!flameData && (
-                <Flame
+                <FlameGraphCanvas
                     flameData={flameData}
                     mappings={mappings.mappingsResolver}
                     metadata={metadata}
                     timeSelector={timeSelector}
                 />
             )}
-
-            <div style={{ display: flameData ? 'none' : undefined }}>
-                <SamplerContext
-                    mappings={mappings.mappingsResolver}
-                    infoPoints={infoPoints}
-                    highlighted={highlighted}
-                    searchQuery={searchQuery}
-                    labelMode={labelMode}
-                    metadata={metadata}
-                    timeSelector={timeSelector}
-                >
-                    {view === VIEW_ALL ? (
-                        <AllView data={data} setLabelMode={setLabelMode} />
-                    ) : view === VIEW_FLAT ? (
-                        <FlatView
-                            data={data}
-                            viewData={flatViewData}
-                            setLabelMode={setLabelMode}
-                        />
-                    ) : (
-                        <SourcesView
-                            data={data}
-                            viewData={sourcesViewData}
-                            setLabelMode={setLabelMode}
-                        />
-                    )}
-                    {infoPoints.enabled && (
-                        <Tooltip
-                            id="infopoint-tooltip"
-                            place="right"
-                            className="infopoint-tooltip"
-                            clickable
-                        />
-                    )}
-                </SamplerContext>
-            </div>
 
             {data.threads.length === 0 && (
                 <NoData isConnectedToSocket={!!socket.socket.socket} />

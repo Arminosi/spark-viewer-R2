@@ -8,14 +8,31 @@ import TopFunctionsButton from './button/TopFunctionsButton';
 import TopFunctionsModal from '../modal/TopFunctionsModal';
 import { getTopFunctions, TopFunction } from '../../utils/topFunctions';
 import AllViewHeader from './header/AllViewHeader';
+import Panel from '../../../common/components/Panel';
+import { useLanguage } from '../../../../i18n';
+
+import { View } from '../views/types';
+import ViewSwitcher from './button/ViewSwitcher';
+import { SamplerMetadata } from '../../../proto/spark_pb';
 
 export interface AllViewProps {
     data: SamplerData;
     setLabelMode: Dispatch<SetStateAction<boolean>>;
+    view: View;
+    setView: Dispatch<SetStateAction<View>>;
+    sourcesViewSupported: boolean;
+    metadata: SamplerMetadata;
 }
 
 // The sampler view in which all data is shown in one, single stack.
-export default function AllView({ data, setLabelMode }: AllViewProps) {
+export default function AllView({
+    data,
+    setLabelMode,
+    view,
+    setView,
+    sourcesViewSupported,
+    metadata
+}: AllViewProps) {
     const labelMode = useContext(LabelModeContext);
     const highlighted = useContext(HighlightedContext)!;
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -73,14 +90,26 @@ export default function AllView({ data, setLabelMode }: AllViewProps) {
         setTimeout(() => tryScroll(), 50);
     }
 
+    const { t } = useLanguage();
+
     return (
-        <div className="allview">
+        <Panel
+            className="allview"
+            title={t('viewer.allView.title') || 'All View'}
+        >
             <AllViewHeader>
+                <TopFunctionsButton onClick={handleOpenModal} />
+                <div style={{ marginLeft: 6 }}></div>
+                <ViewSwitcher
+                    metadata={metadata}
+                    view={view}
+                    setView={setView}
+                    sourcesViewSupported={sourcesViewSupported}
+                />
                 <LabelModeButton
                     labelMode={labelMode}
                     setLabelMode={setLabelMode}
                 />
-                <TopFunctionsButton onClick={handleOpenModal} />
             </AllViewHeader>
 
             <div className="stack">
@@ -99,6 +128,6 @@ export default function AllView({ data, setLabelMode }: AllViewProps) {
                 onFunctionClick={handleFunctionClick}
                 data={data}
             />
-        </div>
+        </Panel>
     );
 }

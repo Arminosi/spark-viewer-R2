@@ -93,6 +93,7 @@ export const zh = {
       memory: '内存',
       disk: '磁盘',
       gc: '垃圾回收',
+      systemDetails: '系统详情',
     },
     units: {
       bytes: '字节',
@@ -132,6 +133,7 @@ export const zh = {
       toggleView: '切换视图',
     },
     metadata: {
+      title: '服务器元数据',
       networkInterfaces: '网络接口',
       pluginsMods: '插件/模组',
       dataPacks: '数据包',
@@ -141,6 +143,19 @@ export const zh = {
     },
     graph: {
       refine: '图表',
+    },
+    settings: {
+      mappings: {
+        title: '映射',
+        description: '选择查看器在显示性能分析帧时应使用的反混淆映射。',
+      },
+      infoPoints: {
+        title: '信息点',
+        description: '选择是否显示信息点。',
+      },
+    },
+    flame: {
+      title: '火焰图',
     },
     failedLoad: {
       message: '无法加载数据。可能已过期；请确认你正在使用较新的版本。',

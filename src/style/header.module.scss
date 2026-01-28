@@ -11,8 +11,9 @@
     box-shadow: 0 0 4px #130b00;
     z-index: 20;
     line-height: 100%;
+    flex-wrap: nowrap;
 
-    > a {
+    >a {
         display: flex;
         align-items: center;
         background-color: #252b2d;
@@ -20,19 +21,26 @@
         padding: 3px 5px 3px 3px;
         margin: 3px 0;
         border: 0;
+        white-space: nowrap;
+        flex-shrink: 1;
+        min-width: 0;
 
-        > h1 {
+        >h1 {
             padding: 0 3px;
             font-size: 14pt;
             margin: 0;
             font-weight: normal;
             color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     }
 
     svg {
         filter: invert(0%);
         padding-right: 5px;
+        flex-shrink: 0;
     }
 }
 
@@ -41,32 +49,32 @@
     display: flex;
     justify-content: center;
 
-    > div {
+    >div {
         display: flex;
         justify-content: space-around;
         flex-grow: 1;
         max-width: 900px;
         padding: 50px 0;
 
-        > svg {
+        >svg {
             width: 25%;
         }
 
-        > div {
+        >div {
             width: 60%;
             display: flex;
             flex-direction: column;
             justify-content: center;
             text-align: center;
 
-            > h1 {
+            >h1 {
                 font-size: min(15vw, 150px);
                 line-height: 1em;
                 margin: 0;
                 margin-bottom: 15px;
             }
 
-            > div {
+            >div {
                 font-size: min(2vw, 20px);
                 line-height: 1.1;
             }
@@ -78,6 +86,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    flex-shrink: 0;
 }
 
 .remote-button {
@@ -88,13 +97,16 @@
     padding: 8px 12px;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     cursor: pointer;
     transition: all 0.2s ease;
     font-size: 14px;
+    white-space: nowrap;
+    flex-shrink: 0;
 
     .button-icon {
-        font-size: 14px;
+        font-size: 16px;
+        flex-shrink: 0;
     }
 
     .button-text {
@@ -106,11 +118,14 @@
         border-color: #718096;
     }
 
-    @media (max-width: 640px) {
+    // Hide text on screens narrower than 900px
+    @media (max-width: 900px) {
         .button-text {
             display: none;
         }
-        padding: 8px;
+
+        padding: 8px 10px;
+        gap: 0;
     }
 }
 

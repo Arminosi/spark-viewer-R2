@@ -27,14 +27,9 @@ export default function LabelModeButton({
                 title={t('viewer.sampler.buttons.label')}
                 labelTrue={t('viewer.sampler.buttons.bytesPerSecond')}
                 labelFalse={t('viewer.sampler.labelMode.percentage')}
-            >
-                <p>
-                    {t('viewer.sampler.buttons.bytesPerSecondDescription')}
-                </p>
-                <p>
-                    {t('viewer.sampler.buttons.percentageAllocationDescription')}
-                </p>
-            </Button>
+                descriptionTrue={t('viewer.sampler.buttons.bytesPerSecondDescription')}
+                descriptionFalse={t('viewer.sampler.buttons.percentageAllocationDescription')}
+            />
         );
     } else {
         return (
@@ -44,14 +39,9 @@ export default function LabelModeButton({
                 title={t('viewer.sampler.buttons.label')}
                 labelTrue={t('viewer.sampler.buttons.timePerTick')}
                 labelFalse={t('viewer.sampler.labelMode.percentage')}
-            >
-                <p>
-                    {t('viewer.sampler.buttons.timePerTickDescription')}
-                </p>
-                <p>
-                    {t('viewer.sampler.labelMode.percentageDescription')}
-                </p>
-            </Button>
+                descriptionTrue={t('viewer.sampler.buttons.timePerTickDescription')}
+                descriptionFalse={t('viewer.sampler.labelMode.percentageDescription')}
+            />
         );
     }
 }

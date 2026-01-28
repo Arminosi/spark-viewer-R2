@@ -24,14 +24,9 @@ export default function SelfTimeModeButton({
                 title={t('viewer.sampler.buttons.sortMode')}
                 labelTrue={t('viewer.sampler.buttons.selfBytesAllocated')}
                 labelFalse={t('viewer.sampler.buttons.totalBytesAllocated')}
-            >
-                <p>
-                    {t('viewer.sampler.buttons.selfBytesDescription')}
-                </p>
-                <p>
-                    {t('viewer.sampler.buttons.totalBytesDescription')}
-                </p>
-            </Button>
+                descriptionTrue={t('viewer.sampler.buttons.selfBytesDescription')}
+                descriptionFalse={t('viewer.sampler.buttons.totalBytesDescription')}
+            />
         );
     } else {
         return (
@@ -41,14 +36,9 @@ export default function SelfTimeModeButton({
                 title={t('viewer.sampler.buttons.sortMode')}
                 labelTrue={t('viewer.sampler.sortMode.selfTime')}
                 labelFalse={t('viewer.sampler.sortMode.totalTime')}
-            >
-                <p>
-                    {t('viewer.sampler.sortMode.selfTimeDescription')}
-                </p>
-                <p>
-                    {t('viewer.sampler.sortMode.totalTimeDescription')}
-                </p>
-            </Button>
+                descriptionTrue={t('viewer.sampler.sortMode.selfTimeDescription')}
+                descriptionFalse={t('viewer.sampler.sortMode.totalTimeDescription')}
+            />
         );
     }
 }

@@ -8,7 +8,8 @@ export interface ButtonProps {
     title: string;
     labelTrue: string;
     labelFalse: string;
-    children: ReactNode[];
+    descriptionTrue?: string;
+    descriptionFalse?: string;
 }
 
 export default function Button({
@@ -17,19 +18,21 @@ export default function Button({
     title,
     labelTrue,
     labelFalse,
-    children,
+    descriptionTrue,
+    descriptionFalse,
 }: ButtonProps) {
     function onClick() {
         setValue(!value);
     }
 
+    const description = value ? descriptionTrue : descriptionFalse;
+
     return (
         <div className="button">
-            <button onClick={onClick}>
+            <button onClick={onClick} title={description}>
                 <FontAwesomeIcon icon={faCogs} /> <span>{title}:</span>{' '}
                 {value ? labelTrue : labelFalse}
             </button>
-            {value ? children[0] : children[1]}
         </div>
     );
 }

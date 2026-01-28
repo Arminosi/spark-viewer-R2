@@ -1,0 +1,57 @@
+.panel {
+    background: #252b2d;
+    border: 1px solid #3c3f41;
+    border-radius: 6px;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 15px;
+        border-bottom: 1px solid #3c3f41;
+        cursor: pointer;
+        user-select: none;
+        background: #2f363d;
+        border-radius: 6px 6px 0 0;
+        transition: background 0.2s;
+
+        &:hover {
+            background: #363d45;
+        }
+
+        &.closed {
+            border-bottom: none;
+            border-radius: 6px;
+        }
+
+        .title {
+            margin: 0;
+            font-size: 14px;
+            color: #ccc;
+            font-weight: 600;
+        }
+
+        .toggle {
+            color: #999;
+            font-size: 12px;
+        }
+    }
+
+    .content {
+        padding: 15px;
+        overflow-x: auto;
+
+        &.hidden {
+            display: none;
+        }
+    }
+
+    // Special styling for flame graph panel
+    &.flame .content {
+        padding: 0;
+        overflow: hidden;
+    }
+}

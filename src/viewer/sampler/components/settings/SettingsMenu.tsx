@@ -7,6 +7,7 @@ import styles from '../../../../style/sampler.module.scss';
 import Switch from '../../../common/components/Switch';
 import { MappingsMetadata } from '../../mappings/fetch';
 import MappingsSelector from './MappingsSelector';
+import { useLanguage } from '../../../../i18n';
 
 export interface SettingsMenuProps {
     mappingsMetadata?: MappingsMetadata;
@@ -23,13 +24,14 @@ export default function SettingsMenu({
     infoPoints,
     toggleInfoPoints,
 }: SettingsMenuProps) {
+    const { t } = useLanguage();
+
     return (
         <TextBox extraClassName={styles['settings-menu']}>
             {mappingsMetadata && (
                 <Setting
-                    name="Mappings"
-                    desc="Select which deobfuscation mappings the viewer should
-                        use when displaying profiler frames."
+                    name={t('viewer.settings.mappings.title') || 'Mappings'}
+                    desc={t('viewer.settings.mappings.description') || 'Select which deobfuscation mappings the viewer should use when displaying profiler frames.'}
                 >
                     <MappingsSelector
                         mappingsMetadata={mappingsMetadata}
@@ -39,8 +41,8 @@ export default function SettingsMenu({
                 </Setting>
             )}
             <Setting
-                name="Info Points"
-                desc="Select whether info points should be shown."
+                name={t('viewer.settings.infoPoints.title') || 'Info Points'}
+                desc={t('viewer.settings.infoPoints.description') || 'Select whether info points should be shown.'}
             >
                 <Switch value={infoPoints} toggle={toggleInfoPoints} />
             </Setting>

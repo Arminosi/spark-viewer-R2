@@ -10,6 +10,8 @@ import {
 import { TimeSelector } from '../../hooks/useTimeSelector';
 import { MappingsResolver } from '../../mappings/resolver';
 import VirtualNode from '../../node/VirtualNode';
+import Panel from '../../../common/components/Panel';
+import { useLanguage } from '../../../../i18n';
 
 export interface FlameProps {
     flameData: VirtualNode;
@@ -24,6 +26,7 @@ export default function Flame({
     metadata,
     timeSelector,
 }: FlameProps) {
+    const { t } = useLanguage();
     const getTimeFunction = timeSelector.getTime;
 
     const isAlloc =
@@ -36,13 +39,15 @@ export default function Flame({
     const calcHeight = Math.min(depth * 20, 5000);
 
     return (
-        <div className="flame" style={{ height: `${calcHeight}px` }}>
-            <AutoSizer>
-                {({ width }) => (
-                    <FlameGraph data={data} height={calcHeight} width={width} />
-                )}
-            </AutoSizer>
-        </div>
+        <Panel className="flame" title={t('viewer.flame.title') || 'Flame Graph'}>
+            <div style={{ height: calcHeight, overflow: 'hidden', margin: -15, padding: 0 }}>
+                <AutoSizer>
+                    {({ width }) => (
+                        <FlameGraph data={data} height={calcHeight} width={width} />
+                    )}
+                </AutoSizer>
+            </div>
+        </Panel>
     );
 }
 
