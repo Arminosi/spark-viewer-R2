@@ -82,7 +82,7 @@ export default function AllView({ data, setLabelMode }: AllViewProps) {
                 />
                 <TopFunctionsButton onClick={handleOpenModal} />
             </AllViewHeader>
-            <hr />
+
             <div className="stack">
                 {data.threads.map(thread => (
                     <BaseNode

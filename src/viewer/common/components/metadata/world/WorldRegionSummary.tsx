@@ -77,19 +77,19 @@ export default function WorldRegionSummary({
             </div>
             <div className="detail-lists">
                 <div>
-                    <h3>
-                        {t('viewer.world.entities')} (<span>{region.totalEntities}</span>):
-                    </h3>
+                    <p>
+                        <b>{t('viewer.world.entities')}</b> (<span>{region.totalEntities}</span>):
+                    </p>
                     <EntityCountsList entityCounts={combinedEntities} />
                 </div>
                 <div>
-                    <h3>
-                        World: {region.world}
-                    </h3>
+                    <p>
+                        <b>World</b>: {region.world}
+                    </p>
                     <br />
-                    <h3>
-                        {t('viewer.world.chunks')} (<span>{region.chunks.length}</span>):
-                    </h3>
+                    <p>
+                        <b>{t('viewer.world.chunks')}</b> (<span>{region.chunks.length}</span>):
+                    </p>
                     <ChunkCountsList chunks={region.chunks} />
                 </div>
             </div>

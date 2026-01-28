@@ -86,8 +86,8 @@ export default function Graph({
 
     return (
         <div className="graph">
-            <div className="header">
-                <h2>{t('viewer.sampler.refine.title')}</h2>
+            <h3>{t('viewer.sampler.refine.title')}</h3>
+            <div className="header-controls">
                 <p>{t('viewer.sampler.refine.description')}</p>
             </div>
 
