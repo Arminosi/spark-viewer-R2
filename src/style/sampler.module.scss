@@ -5,9 +5,30 @@
 
 .sampler {
     :global {
-        .stack {
+
+        .allview,
+        .flatview,
+        .sourceview {
+            background: #252b2d;
+            border: 1px solid #3c3f41;
+            border-radius: 6px;
+            padding: 15px;
             margin-top: 20px;
-            padding-left: 10px;
+
+            hr {
+                border: none;
+                border-top: 1px solid #3c3f41;
+                margin: 15px -15px;
+            }
+
+            >.header {
+                margin: 0 !important;
+            }
+        }
+
+        .stack {
+            margin-top: 0;
+            padding-left: 0;
 
             ul {
                 margin: 0;
@@ -239,7 +260,9 @@
             background-color: #252b2d;
             padding: 20px;
             box-sizing: border-box;
-            border-radius: 0.5rem;
+            border-radius: 6px;
+            border: 1px solid #3c3f41;
+            margin-top: 20px;
 
             >div>div {
                 overflow-x: clip !important;
@@ -257,6 +280,12 @@
         }
 
         .graph {
+            background: #252b2d;
+            border: 1px solid #3c3f41;
+            border-radius: 6px;
+            padding: 20px;
+            margin-top: 20px;
+
             .VictoryContainer {
                 max-width: 1500px;
                 margin: 0 auto;

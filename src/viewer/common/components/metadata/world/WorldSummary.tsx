@@ -22,9 +22,9 @@ export default function WorldSummary({ worldStatistics }: WorldSummaryProps) {
                     <WorldTotalChunks worldsInput={worldStatistics.worlds} />
                 </div>
                 <div>
-                    <p>
-                        <b>{t('viewer.world.entityCounts')}</b>:
-                    </p>
+                    <h3>
+                        {t('viewer.world.entityCounts')}:
+                    </h3>
                     <EntityCountsList
                         entityCounts={worldStatistics.entityCounts}
                     />
