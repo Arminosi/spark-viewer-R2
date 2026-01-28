@@ -55,7 +55,7 @@ const RemoteViewer: NextPageWithLayout = () => {
                 addToHistory({
                     id: downloadPath,
                     type: 'remote',
-                    title: downloadPath.split('/').pop() || downloadPath,
+                    title: decodeURIComponent(downloadPath).split('/').pop() || downloadPath,
                     description: new Date().toLocaleString()
                 });
             } catch (error) {

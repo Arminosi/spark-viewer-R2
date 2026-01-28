@@ -171,7 +171,7 @@ export const zh = {
     noHistory: '暂无历史记录',
     date: '日期',
     type: '类型',
-    id: '标识符',
+    id: '文件名',
     confirmClear: '确定要清除所有历史记录吗？',
   },
   ...zhPlatformInfo,

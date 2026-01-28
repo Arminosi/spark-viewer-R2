@@ -223,7 +223,7 @@ export default function SparkViewer({ initialResult }: SparkViewerProps) {
                     addToHistory({
                         id,
                         type,
-                        title: id.split('/').pop(), // Simple filename as title
+                        title: decodeURIComponent(id).split('/').pop(), // Simple filename as title
                         description: new Date().toLocaleString()
                     });
                 }

@@ -171,7 +171,7 @@ export const en = {
     noHistory: 'No history available',
     date: 'Date',
     type: 'Type',
-    id: 'Identifier',
+    id: 'Filename',
     confirmClear: 'Are you sure you want to clear the history?',
   },
   ...enPlatformInfo,

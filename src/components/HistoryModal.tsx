@@ -52,8 +52,8 @@ export default function HistoryModal({ isOpen, onClose }: HistoryModalProps) {
         <div className={styles.overlay} onClick={handleOverlayClick}>
             <div className={styles.modal}>
                 <div className={styles.header}>
-                    <h2>{t('history.title')}</h2>
-                    <div style={{ marginLeft: 'auto', display: 'flex', gap: '10px', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <h2>{t('history.title')}</h2>
                         <button
                             className={styles.clearButton}
                             onClick={handleClearHistory}
@@ -61,10 +61,10 @@ export default function HistoryModal({ isOpen, onClose }: HistoryModalProps) {
                         >
                             {t('history.clear')}
                         </button>
-                        <button className={styles.closeButton} onClick={onClose}>
-                            ✕
-                        </button>
                     </div>
+                    <button className={styles.closeButton} onClick={onClose}>
+                        ✕
+                    </button>
                 </div>
 
 
@@ -93,7 +93,7 @@ export default function HistoryModal({ isOpen, onClose }: HistoryModalProps) {
                                         {item.type === 'bytebin' ? 'Official' : 'Remote'}
                                     </span>
                                     <span className={styles.size} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={item.id}>
-                                        {item.id.replace(/^.*[\\/]/, '')}
+                                        {item.title || item.id.replace(/^.*[\\/]/, '')}
                                     </span>
                                     <button
                                         className={styles.loadButton}
