@@ -7,71 +7,12 @@
 
         .metadata-grid {
             display: grid;
-            grid-template-columns: 340px minmax(400px, 1fr) 1.2fr;
+            grid-template-columns: 360px 1fr;
             gap: 18px;
             align-items: start;
 
-            @media screen and (max-width: 1600px) {
-                grid-template-columns: 300px 1fr 1fr;
-            }
-
-            @media screen and (max-width: 1200px) {
-                grid-template-columns: 300px 1fr;
-                /* Graph will wrap if it is the 3rd child? Grid doesn't auto-wrap unless configured. */
-                /* We need to define areas or ensure it wraps. */
-            }
-
             @media screen and (max-width: 900px) {
                 grid-template-columns: 1fr;
-            }
-        }
-
-        .graph-column {
-            min-width: 0;
-            background: #252b2d;
-            border: 1px solid #3c3f41;
-            border-radius: 6px;
-            padding: 12px;
-            height: 100%;
-            /* Match height of neighbors if possible */
-
-            /* Hide original graph header margins/styles inside */
-            :global {
-                .graph {
-                    .header {
-                        margin: 0 0 10px 0;
-
-                        h2 {
-                            font-size: 14px;
-                            margin-top: 0;
-                            color: #fff;
-                            border-bottom: 1px solid #3c3f41;
-                            padding-bottom: 5px;
-                        }
-
-                        p {
-                            display: none;
-                        }
-
-                        /* Hide description to save space */
-                    }
-
-                    .VictoryContainer {
-                        margin: 0;
-                    }
-
-                    .legend {
-                        margin-bottom: 0;
-                        flex-wrap: wrap;
-                        gap: 5px;
-                    }
-
-                    .legend .button {
-                        width: auto;
-                        padding: 2px 8px;
-                        font-size: 11px;
-                    }
-                }
             }
         }
 

@@ -8,13 +8,11 @@ import Widgets from './widgets/Widgets';
 export interface WidgetsAndMetadataProps {
     metadata: SparkMetadata;
     metadataToggle: MetadataToggle;
-    graph?: React.ReactNode;
 }
 
 export default function WidgetsAndMetadata({
     metadata,
     metadataToggle,
-    graph,
 }: WidgetsAndMetadataProps) {
     return (
         <div
@@ -38,12 +36,6 @@ export default function WidgetsAndMetadata({
                         <MetadataDetail metadata={metadata} />
                     )}
                 </div>
-
-                {graph && (
-                    <div className={styles['graph-column']}>
-                        {graph}
-                    </div>
-                )}
             </div>
         </div>
     );

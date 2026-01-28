@@ -268,18 +268,17 @@ export default function Sampler({
             <WidgetsAndMetadata
                 metadata={metadata}
                 metadataToggle={metadataToggle}
-                graph={
-                    timeSelector.supported ? (
-                        <Suspense fallback={null}>
-                            <Graph
-                                show={showGraph}
-                                timeSelector={timeSelector}
-                                windowStatistics={data.timeWindowStatistics}
-                            />
-                        </Suspense>
-                    ) : undefined
-                }
             />
+
+            {timeSelector.supported && (
+                <Suspense fallback={null}>
+                    <Graph
+                        show={showGraph}
+                        timeSelector={timeSelector}
+                        windowStatistics={data.timeWindowStatistics}
+                    />
+                </Suspense>
+            )}
 
             {!!flameData && (
                 <Flame
