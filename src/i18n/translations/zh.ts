@@ -88,6 +88,11 @@ export const zh = {
       GC: 'GC',
       TPS: 'TPS',
       MSPT: 'MSPT',
+      performance: '性能',
+      cpu: '处理器 / 硬盘',
+      memory: '内存',
+      disk: '磁盘',
+      gc: '垃圾回收',
     },
     units: {
       bytes: '字节',
@@ -135,7 +140,7 @@ export const zh = {
       memoryAreas: '内存区域',
     },
     graph: {
-      refine: '优化',
+      refine: '图表',
     },
     failedLoad: {
       message: '无法加载数据。可能已过期；请确认你正在使用较新的版本。',
@@ -163,6 +168,21 @@ export const zh = {
       clearBookmarks: '取消所有高亮',
     },
     ...zhViewerDetails,
+  },
+  history: {
+    title: '历史记录',
+    openHistory: '打开历史记录',
+    clear: '清除历史',
+    noHistory: '暂无历史记录',
+    date: '日期',
+    type: '类型',
+    id: '文件名',
+    confirmClear: '确定要清除所有历史记录吗？',
+    types: {
+      official: '官方库',
+      remote: '远程',
+      local: '本地',
+    },
   },
   ...zhPlatformInfo,
 };

@@ -18,6 +18,7 @@ import {
     FetchResult,
     fetchFromRemote,
 } from './common/logic/fetch';
+import { addToHistory } from './common/logic/history';
 import { parse } from './common/logic/parse';
 import {
     FAILED_DATA,
@@ -142,7 +143,7 @@ export default function SparkViewer({ initialResult }: SparkViewerProps) {
                                 if (!bufAB) throw new Error('Remote payload not found in IndexedDB or by re-download');
 
                                 // Clean up IDB and storage markers
-                                await idbDelete(remoteDataKey).catch(() => {});
+                                await idbDelete(remoteDataKey).catch(() => { });
                                 sessionStorage.removeItem(remoteDataKey);
                                 localStorage.removeItem(remoteDataKey);
 
@@ -200,6 +201,52 @@ export default function SparkViewer({ initialResult }: SparkViewerProps) {
                 setData(data);
                 setMetadata(data.metadata);
                 setStatus(status);
+
+                // Add to history if successful
+                if (status !== FAILED_DATA) {
+                    let type: 'remote' | 'bytebin' | 'local' = 'bytebin';
+                    let id = code;
+                    let title = code;
+
+                    // Remote Logic
+                    if (isRemote && result && 'type' in result) {
+                        type = 'remote';
+                        const sessionData = sessionStorage.getItem(remoteDataKey)
+                            || localStorage.getItem(remoteDataKey);
+                        if (sessionData) {
+                            const parsed = JSON.parse(sessionData);
+                            if (parsed.downloadPath) {
+                                id = parsed.downloadPath;
+                            }
+                        }
+                        title = decodeURIComponent(id).split('/').pop() || id;
+                    }
+                    // Local File Logic
+                    else if (code === '_') {
+                        type = 'local';
+                        const filename = selectedFile?.name || 'local-file';
+                        title = filename;
+                        // Generate a unique ID for IDB
+                        id = `local_${Date.now()}_${filename}`;
+
+                        // Save to IndexedDB asynchronously
+                        import('./common/util/idb').then(({ idbPut }) => {
+                            idbPut(id, result.buf).catch(e => console.warn('Failed to cache local file', e));
+                        });
+                    }
+                    // Bytebin Logic
+                    else {
+                        // Keep ID as code
+                        title = id; // Or fetch metadata title if available? Usually just code.
+                    }
+
+                    addToHistory({
+                        id,
+                        type,
+                        title,
+                        description: new Date().toLocaleString()
+                    });
+                }
             } catch (e) {
                 console.log(e);
                 setStatus(FAILED_DATA);
@@ -222,7 +269,7 @@ export default function SparkViewer({ initialResult }: SparkViewerProps) {
                             {t('viewer.failedLoad.message')}
                         </div>
                         <div>
-                            <button onClick={() => router.push('/')} style={{ padding: '6px 10px', borderRadius: 4, background: 'linear-gradient(90deg,#ffc93a,#ffb300)', border: 'none', color: '#111', fontWeight: 600 }}> 
+                            <button onClick={() => router.push('/')} style={{ padding: '6px 10px', borderRadius: 4, background: 'linear-gradient(90deg,#ffc93a,#ffb300)', border: 'none', color: '#111', fontWeight: 600 }}>
                                 {t('viewer.failedLoad.goHome')}
                             </button>
                         </div>

@@ -88,6 +88,11 @@ export const en = {
       GC: 'GC',
       TPS: 'TPS',
       MSPT: 'MSPT',
+      performance: 'Performance',
+      cpu: 'Processor / Disk',
+      memory: 'Memory',
+      disk: 'Disk',
+      gc: 'Garbage Collection',
     },
     units: {
       bytes: 'bytes',
@@ -163,6 +168,21 @@ export const en = {
       clearBookmarks: 'Clear all bookmarks',
     },
     ...enViewerDetails,
+  },
+  history: {
+    title: 'History Access',
+    openHistory: 'Open History',
+    clear: 'Clear History',
+    noHistory: 'No history available',
+    date: 'Date',
+    type: 'Type',
+    id: 'Filename',
+    confirmClear: 'Are you sure you want to clear the history?',
+    types: {
+      official: 'Official',
+      remote: 'Remote',
+      local: 'Local',
+    },
   },
   ...enPlatformInfo,
 };

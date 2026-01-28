@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useContext, useState } from 'react';
+import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from 'react';
 import BasicVirtualNode from '../../node/BasicVirtualNode';
 import SamplerData from '../../SamplerData';
 import { HighlightedContext, LabelModeContext } from '../SamplerContext';
@@ -20,6 +20,35 @@ export default function AllView({ data, setLabelMode }: AllViewProps) {
     const highlighted = useContext(HighlightedContext)!;
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [topFunctions, setTopFunctions] = useState<TopFunction[]>([]);
+
+    const initialCheckDone = useRef(false);
+
+    useEffect(() => {
+        if (!initialCheckDone.current) {
+            initialCheckDone.current = true;
+            if (highlighted.isEmpty()) {
+                const functions = getTopFunctions(data, 1);
+                if (functions.length > 0) {
+                    const top = functions[0];
+                    highlighted.replace(top.node);
+
+                    const idVal = top.node.getId();
+                    const id = `node-${Array.isArray(idVal) ? (idVal as number[]).join('-') : String(idVal)}`;
+
+                    const tryScroll = (attempt = 0) => {
+                        const el = document.getElementById(id);
+                        if (el) {
+                            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        } else if (attempt < 20) {
+                            setTimeout(() => tryScroll(attempt + 1), 100);
+                        }
+                    };
+                    // Wait a bit for the tree expansion to render
+                    setTimeout(() => tryScroll(), 200);
+                }
+            }
+        }
+    }, [data, highlighted]);
 
     function handleOpenModal() {
         const functions = getTopFunctions(data, 20);
@@ -53,7 +82,7 @@ export default function AllView({ data, setLabelMode }: AllViewProps) {
                 />
                 <TopFunctionsButton onClick={handleOpenModal} />
             </AllViewHeader>
-            <hr />
+
             <div className="stack">
                 {data.threads.map(thread => (
                     <BaseNode

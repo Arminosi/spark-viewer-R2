@@ -22,10 +22,13 @@ export default function EntityCountsList({
                 }
                 return (
                     <li key={name}>
-                        <Suspense fallback={null}>
-                            <MinecraftIcon name={name} />
-                        </Suspense>
-                        {name}: <span>{count}</span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <Suspense fallback={<span style={{ width: 16, height: 16, display: 'inline-block' }} />}>
+                                <MinecraftIcon name={name} />
+                            </Suspense>
+                            <span>{name}:</span>
+                        </div>
+                        <span style={{ color: '#fff' }}>{count}</span>
                     </li>
                 );
             })}

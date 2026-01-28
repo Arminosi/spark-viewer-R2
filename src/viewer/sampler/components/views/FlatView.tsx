@@ -62,7 +62,7 @@ export default function FlatView({
                     setIsModalOpen(true);
                 }} />
             </FlatViewHeader>
-            <hr />
+
             {!view ? (
                 <TextBox>Loading...</TextBox>
             ) : (

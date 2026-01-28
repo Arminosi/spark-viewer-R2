@@ -14,12 +14,15 @@ export default function SourcesViewHeader({ children }: HeaderProps) {
         : { singular: 'plugin', plural: 'Plugins' };
 
     return (
-        <div className="header">
-            <h2>{isMod ? t('viewer.sourcesView.modsTitle') : t('viewer.sourcesView.pluginsTitle')}</h2>
-            <p>
-                {isMod ? t('viewer.sourcesView.modsDescription') : t('viewer.sourcesView.pluginsDescription')}
-            </p>
-            {children}
-        </div>
+
+        <>
+            <h3>{isMod ? t('viewer.sourcesView.modsTitle') : t('viewer.sourcesView.pluginsTitle')}</h3>
+            <div className="header-controls">
+                <p>
+                    {isMod ? t('viewer.sourcesView.modsDescription') : t('viewer.sourcesView.pluginsDescription')}
+                </p>
+                {children}
+            </div>
+        </>
     );
 }

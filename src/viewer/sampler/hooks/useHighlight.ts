@@ -9,6 +9,7 @@ export interface Highlight {
     clear: () => void;
     replace: (node: VirtualNode) => void;
     replaceSilently?: (node: VirtualNode) => void;
+    isEmpty: () => boolean;
 }
 
 export default function useHighlight(): Highlight {
@@ -162,24 +163,26 @@ export default function useHighlight(): Highlight {
         [setHighlighted]
     );
 
-    return { toggle, check, has, clear, replace, replaceSilently };
+    const isEmpty = useCallback(() => highlighted.size === 0, [highlighted]);
+
+    return { toggle, check, has, clear, replace, replaceSilently, isEmpty };
 }
 
 // some functions for sets which accept either 'value' or '[value1, value2]' parameters
 const setMultiOp =
     (func: (set: Set<number>, value: number) => boolean) =>
-    (set: Set<number>, value: number | number[]): boolean => {
-        if (Array.isArray(value)) {
-            for (const el of value) {
-                if (func(set, el)) {
-                    return true;
+        (set: Set<number>, value: number | number[]): boolean => {
+            if (Array.isArray(value)) {
+                for (const el of value) {
+                    if (func(set, el)) {
+                        return true;
+                    }
                 }
+                return false;
+            } else {
+                return func(set, value);
             }
-            return false;
-        } else {
-            return func(set, value);
-        }
-    };
+        };
 
 const setHas = setMultiOp((set, v) => set.has(v));
 const setAdd = setMultiOp((set, v) => {

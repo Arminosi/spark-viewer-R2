@@ -127,11 +127,13 @@ export default function MinecraftIcon({ name }: MinecraftIconProps) {
     };
 
     const icon = lookup[name];
+    const baseStyle = styles['icon-minecraft-sm'];
+
     if (icon) {
-        const baseStyle = styles['icon-minecraft-sm'];
         const iconStyle = styles[`icon-minecraft-${icon}`];
         return <i className={`${baseStyle} ${iconStyle}`}></i>;
     } else {
-        return null;
+        // Return placeholder with same dimensions
+        return <i className={baseStyle} style={{ backgroundImage: 'none', display: 'inline-block', width: '16px', height: '16px' }}></i>;
     }
 }

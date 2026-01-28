@@ -35,56 +35,56 @@ export default function SourcesView({
 
     return (
         <>
-        <div className="sourceview">
-            <SourcesViewHeader>
-                <LabelModeButton
-                    labelMode={labelMode}
-                    setLabelMode={setLabelMode}
-                />
-                <MergeModeButton merged={merged} setMerged={setMerged} />
-                <TopFunctionsButton onClick={() => {
-                    const functions = getTopFunctions(data, 20);
-                    setTopFunctions(functions);
-                    setIsModalOpen(true);
-                }} />
-            </SourcesViewHeader>
-            <hr />
-            {!view ? (
-                <TextBox>Loading...</TextBox>
-            ) : (
-                <>
-                    {view.map(viewData => (
-                        <SourceSection
-                            data={data}
-                            viewData={viewData}
-                            key={viewData.source}
-                        />
-                    ))}
-                    <OtherSourcesSection
-                        alreadyShown={view.map(s => s.source)}
+            <div className="sourceview">
+                <SourcesViewHeader>
+                    <LabelModeButton
+                        labelMode={labelMode}
+                        setLabelMode={setLabelMode}
                     />
-                </>
-            )}
-        </div>
-        <TopFunctionsModal
-            topFunctions={topFunctions}
-            isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
-            onFunctionClick={(func) => {
-                const idVal = func.node.getId();
-                const id = `node-${Array.isArray(idVal) ? (idVal as number[]).join('-') : String(idVal)}`;
-                const tryScroll = (attempt = 0) => {
-                    const el = document.getElementById(id);
-                    if (el) {
-                        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    } else if (attempt < 8) {
-                        setTimeout(() => tryScroll(attempt + 1), 100);
-                    }
-                };
-                setTimeout(() => tryScroll(), 50);
-            }}
-            data={data}
-        />
+                    <MergeModeButton merged={merged} setMerged={setMerged} />
+                    <TopFunctionsButton onClick={() => {
+                        const functions = getTopFunctions(data, 20);
+                        setTopFunctions(functions);
+                        setIsModalOpen(true);
+                    }} />
+                </SourcesViewHeader>
+
+                {!view ? (
+                    <TextBox>Loading...</TextBox>
+                ) : (
+                    <>
+                        {view.map(viewData => (
+                            <SourceSection
+                                data={data}
+                                viewData={viewData}
+                                key={viewData.source}
+                            />
+                        ))}
+                        <OtherSourcesSection
+                            alreadyShown={view.map(s => s.source)}
+                        />
+                    </>
+                )}
+            </div>
+            <TopFunctionsModal
+                topFunctions={topFunctions}
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onFunctionClick={(func) => {
+                    const idVal = func.node.getId();
+                    const id = `node-${Array.isArray(idVal) ? (idVal as number[]).join('-') : String(idVal)}`;
+                    const tryScroll = (attempt = 0) => {
+                        const el = document.getElementById(id);
+                        if (el) {
+                            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        } else if (attempt < 8) {
+                            setTimeout(() => tryScroll(attempt + 1), 100);
+                        }
+                    };
+                    setTimeout(() => tryScroll(), 50);
+                }}
+                data={data}
+            />
         </>
     );
 }
