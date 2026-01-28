@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import RemoteReportsModal from './RemoteReportsModal';
+import HistoryModal from './HistoryModal';
 import SparkLogo from '../assets/spark-logo.svg';
 import { useLanguage } from '../i18n';
 
@@ -14,12 +15,13 @@ export interface HeaderProps {
 export default function Header({ title = 'Artstyle | Spark Profiler' }: HeaderProps) {
     const router = useRouter();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isHistoryOpen, setIsHistoryOpen] = useState(false);
     const { t, language, setLanguage } = useLanguage();
-    
+
     // 检查是否在查看器页面（有code参数或远程加载）
-    const isViewerPage = router.pathname === '/[code]' || 
-                         router.pathname === '/remote' || 
-                         (router.query.code && router.query.code !== '_');
+    const isViewerPage = router.pathname === '/[code]' ||
+        router.pathname === '/remote' ||
+        (router.query.code && router.query.code !== '_');
 
     return (
         <>
@@ -28,7 +30,7 @@ export default function Header({ title = 'Artstyle | Spark Profiler' }: HeaderPr
                     <SparkLogo width="2.5em" height="2.5em" />
                     <h1>{title}</h1>
                 </Link>
-                
+
                 {isViewerPage && (
                     <div className={styles.controls}>
                         <button
@@ -40,6 +42,14 @@ export default function Header({ title = 'Artstyle | Spark Profiler' }: HeaderPr
                             <span className={styles.buttonText}>{t('header.remoteReports')}</span>
                         </button>
                         <button
+                            className={styles.remoteButton}
+                            onClick={() => setIsHistoryOpen(true)}
+                            title={t('history.openHistory')}
+                        >
+                            <span className={styles.buttonIcon}>🕒</span>
+                            <span className={styles.buttonText}>{t('history.title')}</span>
+                        </button>
+                        <button
                             className={styles.languageButton}
                             onClick={() => setLanguage(language === 'zh-CN' ? 'en' : 'zh-CN')}
                             title={t('header.switchLanguage')}
@@ -49,10 +59,14 @@ export default function Header({ title = 'Artstyle | Spark Profiler' }: HeaderPr
                     </div>
                 )}
             </header>
-            
-            <RemoteReportsModal 
-                isOpen={isModalOpen} 
-                onClose={() => setIsModalOpen(false)} 
+
+            <RemoteReportsModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+            />
+            <HistoryModal
+                isOpen={isHistoryOpen}
+                onClose={() => setIsHistoryOpen(false)}
             />
         </>
     );
