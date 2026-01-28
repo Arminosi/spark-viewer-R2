@@ -38,8 +38,8 @@ export const zhViewerDetails = {
       selfTimeDescription: '方法按其"自身时间"排序（仅执行方法内代码的时间，不包括子调用）',
     },
     refine: {
-      title: '优化',
-      description: '下图显示了性能分析过程中的一些关键指标。您可以用光标拖动选择以将性能分析优化到特定时间段。',
+      title: '图表',
+      description: '下图显示了性能分析过程中的一些关键指标。您可以用光标拖动选择以将性能分析筛选到特定时间段。',
     },
     mappings: {
       title: '映射：',

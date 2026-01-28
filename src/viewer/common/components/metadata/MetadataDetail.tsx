@@ -65,23 +65,28 @@ export default function MetadataDetail({ metadata }: MetadataDetailProps) {
     const { runningTime, numberOfTicks, numberOfIncludedTicks, samplerEngine } =
         unwrapSamplerMetadata(metadata);
 
-    const [view, setView] = useState(t('viewer.metadataTabs.platform'));
+    const [view, setView] = useState(
+        !!platformStatistics?.world &&
+            !!platformStatistics?.world?.totalEntities
+            ? t('viewer.metadataTabs.world')
+            : t('viewer.metadataTabs.platform')
+    );
     const views: Record<string, () => boolean> = {
         [t('viewer.metadataTabs.platform')]: () => true,
         [t('viewer.metadataTabs.memory')]: () =>
             !!platformStatistics?.memory?.heap ||
             !!platformStatistics?.memory?.pools?.length,
-        [t('viewer.metadataTabs.network')]: () => !!Object.keys(systemStatistics?.net ?? {}).length,
         [t('viewer.metadataTabs.jvmFlags')]: () => !!systemStatistics?.java?.vmArgs,
         [t('viewer.metadataTabs.configurations')]: () => !!parsedConfigurations,
         [t('viewer.metadataTabs.world')]: () =>
             !!platformStatistics?.world &&
             !!platformStatistics?.world?.totalEntities,
         [t('viewer.metadataTabs.misc')]: () => !!parsedExtraMetadata,
-        [t('viewer.metadataTabs.gameRules')]: () => !!platformStatistics?.world?.gameRules.length,
         [t('viewer.metadataTabs.pluginsMods')]: () =>
             !!platformStatistics?.world?.dataPacks.length ||
             !!Object.keys(metadata.sources).length,
+        [t('viewer.metadataTabs.network')]: () => !!Object.keys(systemStatistics?.net ?? {}).length,
+        [t('viewer.metadataTabs.gameRules')]: () => !!platformStatistics?.world?.gameRules.length,
     };
 
     return (

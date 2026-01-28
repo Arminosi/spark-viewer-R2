@@ -6,12 +6,14 @@ import { NextPageWithLayout, SelectedFileContext } from './_app';
 import RemoteReportsModal from '../components/RemoteReportsModal';
 import { useLanguage } from '../i18n';
 import styles from '../style/homepage.module.scss';
+import HistoryModal from '../components/HistoryModal';
 
 const Index: NextPageWithLayout = () => {
     const { t } = useLanguage();
     const { setSelectedFile } = useContext(SelectedFileContext);
     const router = useRouter();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
     function onFileSelected(file: File) {
         setSelectedFile(file);
@@ -28,11 +30,20 @@ const Index: NextPageWithLayout = () => {
                 >
                     {t('homepage.openRemoteReports')}
                 </button>
+
+                <button
+                    className={styles['remote-open-button']}
+                    onClick={() => setIsHistoryOpen(true)}
+                    style={{ marginLeft: '10px' }}
+                >
+                    {t('history.title')}
+                </button>
             </div>
 
             <ViewerSection onFileSelected={onFileSelected} />
 
             <RemoteReportsModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+            <HistoryModal isOpen={isHistoryOpen} onClose={() => setIsHistoryOpen(false)} />
         </article>
     );
 };

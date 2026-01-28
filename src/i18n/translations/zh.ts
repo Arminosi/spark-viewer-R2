@@ -135,7 +135,7 @@ export const zh = {
       memoryAreas: '内存区域',
     },
     graph: {
-      refine: '优化',
+      refine: '图表',
     },
     failedLoad: {
       message: '无法加载数据。可能已过期；请确认你正在使用较新的版本。',
