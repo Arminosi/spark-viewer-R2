@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import TextBox from '../components/TextBox';
 import { fetchFromRemote, FetchResult } from '../viewer/common/logic/fetch';
+import { addToHistory } from '../viewer/common/logic/history';
 import { parse } from '../viewer/common/logic/parse';
 import {
     FAILED_DATA,
@@ -49,6 +50,14 @@ const RemoteViewer: NextPageWithLayout = () => {
                 // changing the URL.
                 setInitialResult(result);
                 setStatus(newStatus);
+
+                // Add to history
+                addToHistory({
+                    id: downloadPath,
+                    type: 'remote',
+                    title: downloadPath.split('/').pop() || downloadPath,
+                    description: new Date().toLocaleString()
+                });
             } catch (error) {
                 console.error('Failed to load remote file:', error);
 
@@ -98,13 +107,13 @@ const RemoteViewer: NextPageWithLayout = () => {
         const ProgressBar = require('../components/ProgressBar').default;
         return (
             <TextBox>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'stretch', width: '100%' }}>
-                        <div>{errorMessage || '正在加载远程报告...'}</div>
-                        <div style={{ width: '100%' }}>
-                            <ProgressBar percent={progress} />
-                        </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'stretch', width: '100%' }}>
+                    <div>{errorMessage || '正在加载远程报告...'}</div>
+                    <div style={{ width: '100%' }}>
+                        <ProgressBar percent={progress} />
                     </div>
-                </TextBox>
+                </div>
+            </TextBox>
         );
     }
 
