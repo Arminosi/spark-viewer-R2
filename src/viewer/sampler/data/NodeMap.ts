@@ -9,6 +9,7 @@ export default class NodeMap {
     readonly allNodes: NodeWithId[];
     readonly threadNodes: ThreadNodeWithId[];
     readonly stackTraceNodes: StackTraceNodeWithId[];
+    readonly parentIds: Int32Array;
 
     constructor(input: ThreadNode[]) {
         const castedInput = input as ThreadNodeWithId[];
@@ -26,10 +27,27 @@ export default class NodeMap {
             lastThreadId + 1,
             nodes.length
         ) as StackTraceNodeWithId[];
+
+        this.parentIds = new Int32Array(nodes.length).fill(-1);
+        for (const node of nodes) {
+            if (node.children) {
+                for (const child of node.children) {
+                    this.parentIds[child.id] = node.id;
+                }
+            }
+        }
     }
 
     public getNode(id: number): NodeWithId {
         return this.allNodes[id];
+    }
+
+    public getParent(id: number): NodeWithId | undefined {
+        const parentId = this.parentIds[id];
+        if (parentId === -1) {
+            return undefined;
+        }
+        return this.allNodes[parentId];
     }
 }
 

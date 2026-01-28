@@ -12,7 +12,8 @@ import { formatTime } from '../../../common/util/format';
 import SamplerData from '../../SamplerData';
 import { getTopFunctions } from '../../utils/topFunctions';
 
-import type { Highlight } from '../../hooks/useHighlight';
+import BasicVirtualNode from '../../node/BasicVirtualNode';
+import VirtualNode from '../../node/VirtualNode';
 
 interface Props {
     data: SamplerData;
@@ -53,8 +54,33 @@ export default function IntelligentAnalyzer({ data, highlighted }: Props) {
 
         // Analysis text
         let analysisText = '';
-        let sourceName = topFunction?.source || t('viewer.intelligentAnalyzer.unknownSource');
-        if (!topFunction?.source && (topFunction?.name.startsWith('net.minecraft') || topFunction?.name.startsWith('java'))) {
+        let mappedSource = topFunction?.source;
+        let relatedNode: VirtualNode | null = null;
+
+        if (!mappedSource && topFunction) {
+            let currId = topFunction.node.getId();
+            if (typeof currId === 'number') {
+                let curr = data.nodes.getNode(currId);
+                let depth = 0;
+                // Backtrack up to 500 levels to find a parent with a source
+                while (curr && depth < 500) {
+                    const parent = data.nodes.getParent(curr.id);
+                    if (!parent) break;
+
+                    const parentSource = data.sources.getSource(parent.id);
+                    if (parentSource) {
+                        mappedSource = parentSource;
+                        relatedNode = new BasicVirtualNode(data, parent);
+                        break;
+                    }
+                    curr = parent;
+                    depth++;
+                }
+            }
+        }
+
+        let sourceName = mappedSource || t('viewer.intelligentAnalyzer.unknownSource');
+        if (!mappedSource && (topFunction?.name.startsWith('net.minecraft') || topFunction?.name.startsWith('java'))) {
             sourceName = 'Minecraft / Java';
         }
 
@@ -63,7 +89,7 @@ export default function IntelligentAnalyzer({ data, highlighted }: Props) {
         } else {
             if (sourceName === 'minecraft' || sourceName === 'java' || sourceName === 'Minecraft / Java') {
                 analysisText = t('viewer.intelligentAnalyzer.vanillaIssue');
-            } else if (topFunction?.source) {
+            } else if (mappedSource) {
                 analysisText = t('viewer.intelligentAnalyzer.checkMod').replace('{source}', sourceName);
             } else {
                 analysisText = t('viewer.intelligentAnalyzer.generatedInsights') + ' ' + (topFunction?.name || 'Unknown');
@@ -74,7 +100,8 @@ export default function IntelligentAnalyzer({ data, highlighted }: Props) {
             status,
             topFunction,
             sourceName,
-            analysisText
+            analysisText,
+            relatedNode
         };
     }, [data, t]);
 
@@ -143,6 +170,17 @@ export default function IntelligentAnalyzer({ data, highlighted }: Props) {
                             <div style={{ fontSize: '1.1em', fontWeight: 'bold', wordBreak: 'break-all' }}>
                                 {analysis.topFunction.name}
                             </div>
+                            {analysis.relatedNode && (
+                                <div style={{ fontSize: '0.85em', color: '#999', marginTop: '4px', wordBreak: 'break-all' }}>
+                                    ↳ {analysis.sourceName}: {(() => {
+                                        const details = analysis.relatedNode.getDetails();
+                                        if (details.type === 'stackTrace') {
+                                            return `${details.className}.${details.methodName}`;
+                                        }
+                                        return details.name;
+                                    })()}
+                                </div>
+                            )}
                             <div style={{ color: '#ffc107', marginTop: '5px' }}>
                                 {formatTime(analysis.topFunction.selfTime)} ms ({analysis.topFunction.percentage.toFixed(2)}%)
                             </div>
