@@ -15,10 +15,18 @@ import TopFunctionsButton from './button/TopFunctionsButton';
 import TopFunctionsModal from '../modal/TopFunctionsModal';
 import { getTopFunctions, TopFunction } from '../../utils/topFunctions';
 
+import { View } from '../views/types';
+import ViewSwitcher from './button/ViewSwitcher';
+import { SamplerMetadata } from '../../../proto/spark_pb';
+
 export interface SourcesViewProps {
     data: SamplerData;
     viewData?: SourcesViewData;
     setLabelMode: Dispatch<SetStateAction<boolean>>;
+    view: View;
+    setView: Dispatch<SetStateAction<View>>;
+    sourcesViewSupported: boolean;
+    metadata: SamplerMetadata;
 }
 
 // The sampler view in which there is a stack displayed for each known source.
@@ -26,10 +34,14 @@ export default function SourcesView({
     data,
     viewData,
     setLabelMode,
+    view,
+    setView,
+    sourcesViewSupported,
+    metadata
 }: SourcesViewProps) {
     const labelMode = useContext(LabelModeContext);
     const [merged, setMerged] = useState(true);
-    const view = merged ? viewData?.sourcesMerged : viewData?.sourcesSeparate;
+    const sourceNodes = merged ? viewData?.sourcesMerged : viewData?.sourcesSeparate;
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [topFunctions, setTopFunctions] = useState<TopFunction[]>([]);
 
@@ -37,23 +49,30 @@ export default function SourcesView({
         <>
             <div className="sourceview">
                 <SourcesViewHeader>
-                    <LabelModeButton
-                        labelMode={labelMode}
-                        setLabelMode={setLabelMode}
-                    />
-                    <MergeModeButton merged={merged} setMerged={setMerged} />
                     <TopFunctionsButton onClick={() => {
                         const functions = getTopFunctions(data, 20);
                         setTopFunctions(functions);
                         setIsModalOpen(true);
                     }} />
+                    <div style={{ marginLeft: 6 }}></div>
+                    <ViewSwitcher
+                        metadata={metadata}
+                        view={view}
+                        setView={setView}
+                        sourcesViewSupported={sourcesViewSupported}
+                    />
+                    <LabelModeButton
+                        labelMode={labelMode}
+                        setLabelMode={setLabelMode}
+                    />
+                    <MergeModeButton merged={merged} setMerged={setMerged} />
                 </SourcesViewHeader>
 
-                {!view ? (
+                {!sourceNodes ? (
                     <TextBox>Loading...</TextBox>
                 ) : (
                     <>
-                        {view.map(viewData => (
+                        {sourceNodes.map(viewData => (
                             <SourceSection
                                 data={data}
                                 viewData={viewData}
@@ -61,7 +80,7 @@ export default function SourcesView({
                             />
                         ))}
                         <OtherSourcesSection
-                            alreadyShown={view.map(s => s.source)}
+                            alreadyShown={sourceNodes.map(s => s.source)}
                         />
                     </>
                 )}

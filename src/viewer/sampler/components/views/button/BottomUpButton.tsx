@@ -19,13 +19,8 @@ export default function BottomUpButton({
             title={t('viewer.sampler.buttons.display')}
             labelTrue={t('viewer.sampler.displayMode.bottomUp')}
             labelFalse={t('viewer.sampler.displayMode.topDown')}
-        >
-            <p>
-                {t('viewer.sampler.displayMode.bottomUpDescription')}
-            </p>
-            <p>
-                {t('viewer.sampler.displayMode.topDownDescription')}
-            </p>
-        </Button>
+            descriptionTrue={t('viewer.sampler.displayMode.bottomUpDescription')}
+            descriptionFalse={t('viewer.sampler.displayMode.topDownDescription')}
+        />
     );
 }

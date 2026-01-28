@@ -19,13 +19,8 @@ export default function MergeModeButton({
             title={t('viewer.sampler.buttons.mergeMode')}
             labelTrue={t('viewer.sampler.buttons.merge')}
             labelFalse={t('viewer.sampler.buttons.separate')}
-        >
-            <p>
-                {t('viewer.sampler.buttons.mergeDescription')}
-            </p>
-            <p>
-                {t('viewer.sampler.buttons.separateDescription')}
-            </p>
-        </Button>
+            descriptionTrue={t('viewer.sampler.buttons.mergeDescription')}
+            descriptionFalse={t('viewer.sampler.buttons.separateDescription')}
+        />
     );
 }

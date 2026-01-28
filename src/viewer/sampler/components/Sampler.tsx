@@ -300,18 +300,33 @@ export default function Sampler({
                     timeSelector={timeSelector}
                 >
                     {view === VIEW_ALL ? (
-                        <AllView data={data} setLabelMode={setLabelMode} />
+                        <AllView
+                            data={data}
+                            setLabelMode={setLabelMode}
+                            view={view}
+                            setView={setView}
+                            sourcesViewSupported={data.sources.hasSources()}
+                            metadata={metadata}
+                        />
                     ) : view === VIEW_FLAT ? (
                         <FlatView
                             data={data}
                             viewData={flatViewData}
                             setLabelMode={setLabelMode}
+                            view={view}
+                            setView={setView}
+                            sourcesViewSupported={data.sources.hasSources()}
+                            metadata={metadata}
                         />
                     ) : (
                         <SourcesView
                             data={data}
                             viewData={sourcesViewData}
                             setLabelMode={setLabelMode}
+                            view={view}
+                            setView={setView}
+                            sourcesViewSupported={data.sources.hasSources()}
+                            metadata={metadata}
                         />
                     )}
                     {infoPoints.enabled && (

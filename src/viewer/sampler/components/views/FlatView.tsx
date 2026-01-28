@@ -21,10 +21,18 @@ import { getTopFunctions, TopFunction } from '../../utils/topFunctions';
 
 export const BottomUpContext = createContext(false);
 
+import { View } from '../views/types';
+import ViewSwitcher from './button/ViewSwitcher';
+import { SamplerMetadata } from '../../../proto/spark_pb';
+
 export interface FlatViewProps {
     data: SamplerData;
     viewData?: FlatViewData;
     setLabelMode: Dispatch<SetStateAction<boolean>>;
+    view: View;
+    setView: Dispatch<SetStateAction<View>>;
+    sourcesViewSupported: boolean;
+    metadata: SamplerMetadata;
 }
 
 // The sampler view in which the stack is flattened to the top x nodes
@@ -33,6 +41,10 @@ export default function FlatView({
     data,
     viewData,
     setLabelMode,
+    view,
+    setView,
+    sourcesViewSupported,
+    metadata
 }: FlatViewProps) {
     const labelMode = useContext(LabelModeContext);
     const [bottomUp, setBottomUp] = useState(false);
@@ -40,13 +52,25 @@ export default function FlatView({
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [topFunctions, setTopFunctions] = useState<TopFunction[]>([]);
 
-    const view = selfTimeMode
+    const nodes = selfTimeMode
         ? viewData?.flatSelfTime
         : viewData?.flatTotalTime;
 
     return (
         <div className="flatview">
             <FlatViewHeader>
+                <TopFunctionsButton onClick={() => {
+                    const functions = getTopFunctions(data, 20);
+                    setTopFunctions(functions);
+                    setIsModalOpen(true);
+                }} />
+                <div style={{ marginLeft: 6 }}></div>
+                <ViewSwitcher
+                    metadata={metadata}
+                    view={view}
+                    setView={setView}
+                    sourcesViewSupported={sourcesViewSupported}
+                />
                 <LabelModeButton
                     labelMode={labelMode}
                     setLabelMode={setLabelMode}
@@ -56,19 +80,14 @@ export default function FlatView({
                     selfTimeMode={selfTimeMode}
                     setSelfTimeMode={setSelfTimeMode}
                 />
-                <TopFunctionsButton onClick={() => {
-                    const functions = getTopFunctions(data, 20);
-                    setTopFunctions(functions);
-                    setIsModalOpen(true);
-                }} />
             </FlatViewHeader>
 
-            {!view ? (
+            {!nodes ? (
                 <TextBox>Loading...</TextBox>
             ) : (
                 <div className="stack">
                     <BottomUpContext.Provider value={bottomUp}>
-                        {view.map(thread => (
+                        {nodes.map(thread => (
                             <BaseNode
                                 parents={[]}
                                 node={new FlatThreadVirtualNode(data, thread)}

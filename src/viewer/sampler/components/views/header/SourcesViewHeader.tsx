@@ -18,9 +18,6 @@ export default function SourcesViewHeader({ children }: HeaderProps) {
         <>
             <h3>{isMod ? t('viewer.sourcesView.modsTitle') : t('viewer.sourcesView.pluginsTitle')}</h3>
             <div className="header-controls">
-                <p>
-                    {isMod ? t('viewer.sourcesView.modsDescription') : t('viewer.sourcesView.pluginsDescription')}
-                </p>
                 {children}
             </div>
         </>

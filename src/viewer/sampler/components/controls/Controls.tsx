@@ -17,7 +17,7 @@ import GraphButton from './GraphButton';
 import LastUpdateSpinner from './LastUpdateSpinner';
 import SearchBar from './SearchBar';
 import SettingsButton from './SettingsButton';
-import ToggleViewButton from './ToggleViewButton';
+
 
 export interface ControlsProps {
     data: SamplerData;
@@ -78,12 +78,7 @@ export default function Controls({
             />
             {!flameData ? (
                 <>
-                    <ToggleViewButton
-                        metadata={metadata}
-                        view={view}
-                        setView={setView}
-                        sourcesViewSupported={sourcesViewSupported}
-                    />
+
                     <FlameButton data={data} setFlameData={setFlameData} />
                     <ExportButton exportCallback={exportCallback} />
                     <SearchBar searchQuery={searchQuery} />

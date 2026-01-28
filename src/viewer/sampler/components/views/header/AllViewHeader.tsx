@@ -7,9 +7,6 @@ export default function AllViewHeader({ children }: HeaderProps) {
         <>
             <h3>{t('viewer.allView.title')}</h3>
             <div className="header-controls">
-                <p>
-                    {t('viewer.allView.description')}
-                </p>
                 {children}
             </div>
         </>
