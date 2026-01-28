@@ -11,8 +11,8 @@ export const zh = {
     close: '关闭',
   },
   header: {
-    title: 'Artstyle | Spark Profiler',
-    remoteReports: '远程报告',
+    title: '艺式Artstyle | Spark Profiler',
+    remoteReports: '服务器报告库',
     openRemoteReports: '打开远程报告库',
     switchLanguage: '切换语言',
   },
@@ -77,8 +77,8 @@ export const zh = {
       total: '总计',
       'avg time': '平均耗时',
       'avg freq': '平均频率',
-      'G1 Young': 'G1 年轻代',
-      'G1 Old': 'G1 老年代',
+      'G1 Young': 'G1 Young',
+      'G1 Old': 'G1 Old',
     },
     widgets: {
       Disk: '磁盘',
@@ -152,7 +152,7 @@ export const zh = {
       author: '作者',
       description: '描述',
       suggestionsTitle: '可能关联的来源',
-      suggestionsNone: '未找到附近的建议',
+      suggestionsNone: '没有识别到关联的来源',
     },
     contextMenu: {
       viewAsFlame: '以火焰图查看',
