@@ -11,13 +11,13 @@ import Panel from '../../../common/components/Panel';
 import { formatTime } from '../../../common/util/format';
 import SamplerData from '../../SamplerData';
 import { getTopFunctions } from '../../utils/topFunctions';
-
 import BasicVirtualNode from '../../node/BasicVirtualNode';
 import VirtualNode from '../../node/VirtualNode';
+import type { Highlight as SamplerHighlight } from '../../hooks/useHighlight';
 
 interface Props {
     data: SamplerData;
-    highlighted: Highlight;
+    highlighted: SamplerHighlight;
 }
 
 export default function IntelligentAnalyzer({ data, highlighted }: Props) {

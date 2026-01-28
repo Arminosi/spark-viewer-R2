@@ -318,6 +318,7 @@ export default function FlameGraphCanvas({
             resizeObserver.disconnect();
             mutationObserver.disconnect();
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [flameData, mappings, metadata, timeSelector]);
 
     return (

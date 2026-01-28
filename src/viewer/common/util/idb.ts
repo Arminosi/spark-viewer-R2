@@ -66,4 +66,5 @@ export async function idbClearAll() {
     });
 }
 
-export default { idbPut, idbGet, idbDelete, idbClearAll };
+const idb = { idbPut, idbGet, idbDelete, idbClearAll };
+export default idb;
